@@ -11,7 +11,7 @@ import {
   Container, Content, Text, Card, Form, Item, Label, Picker, Icon, Input, Footer
 } from 'native-base'
 import { 
-  netUsers, eNetPrefix, eNetDenom, eNetTypePacket, netInbox, timer, types, Empty, 
+  netUsers, eNetProvider, eNetDenom, reloaded, eNetTypePacket, netInbox, timer, types, Empty, 
   ModalPopUp, PickerDroid, ReloadScreen, PleaseWait, Processed, styles,
   formatPrice, timers, CheckedData, ReadingContact, Denied, ModalContact, ContactItem
 } from '../../CollectionScreen'
@@ -23,11 +23,12 @@ export default class EletricPacketScreen extends Component {
   _isMounted = false;
   state = {
     handphone: '',
-    prefix: '',
     denom: '',
     denomPrice: '',
     selectTypes: '',
+    selectProv: '',
     counter: 1,
+    provider: [],
     contacts: [],
     isContacts: [],
     ArrDenom: [],
@@ -35,6 +36,7 @@ export default class EletricPacketScreen extends Component {
     modalVisible: false,
     refreshing: false,
     isShowNominal: false,
+    isShowProvider: false,
     isShowPhone: false,
     isBuying: false,
     isChecking: false,
@@ -47,6 +49,7 @@ export default class EletricPacketScreen extends Component {
     this._isMounted = true;
     this._onRetrieveValueDataStorage()
     this._onRetreiveValueDataTypes()
+    this._onRetrieveValueDataProvider()
   }
 
   componentWillUnmount() {
@@ -67,12 +70,13 @@ export default class EletricPacketScreen extends Component {
     }
   }
   // provider
-  _onRetrieveValueDataPrefix = async () => {
+  _onRetrieveValueDataProvider = async () => {
     try {
-      let results = await axios.get(eNetPrefix() + this.state.handphone.substring(0, 4) )
-      let data = results.data.data[0].opr_pref
-      console.log(data)
-      if (this._isMounted) { this.setState({ prefix: data })}
+      let results = await axios.get(eNetProvider())
+      let data = results.data
+      if (this._isMounted) {
+        this.setState({ provider : data })
+      }
     }catch(err) {
       throw err;
     }
@@ -82,7 +86,9 @@ export default class EletricPacketScreen extends Component {
     try {
       let results = await axios.get(eNetTypePacket())
       let data = results.data
-      if (this._isMounted) { this.setState({ ArrTypes: data })}
+      if (this._isMounted) { 
+        this.setState({ ArrTypes: data })
+      }
     } catch(err){
       throw err;
     }
@@ -90,8 +96,8 @@ export default class EletricPacketScreen extends Component {
   // check e number
   _onCheckNumberRenderPrefix = value => {
     this.setState({ handphone : value }, () => {
-      if (this.state.handphone.length === 4) {
-        this._onRetrieveValueDataPrefix()
+      if (this.state.handphone) {
+        this.setState({ isShowProvider : true })
       }
       // if (this.state.handphone.length === 11) {
       //   this._onRetrieveValueDataDenom()
@@ -115,6 +121,21 @@ export default class EletricPacketScreen extends Component {
       }
     })
   }
+  // retrieve data types
+  _onRetrieveSelectProvider = value => {
+      this.setState({ selectProv: value }, () => {
+        if (this.state.selectProv !== this.state.provider) {
+          this.setState({ isShowPhone: true })
+        }
+      })
+      // if (selectTypes === "PAKET DATA" || selectTypes === "PAKET TELPON" || selectTypes === "PAKET SMS" ||
+      //   selectTypes === "PAKET TRANSFER" || selectTypes === "TCASH") {
+      //   this.setState({ isShowNominal: true }, () => setTimeout(() => {
+      //     this._onRetrieveValueDataDenom()
+      //   }, 1000))
+      // }
+  }
+
   // users
   _onRetreiveValueDataUser = async () => {
     try {
@@ -152,11 +173,11 @@ export default class EletricPacketScreen extends Component {
   // select denome 
   _onRetrieveValueDataDenom = async () => {
     try {
-      let { id, handphone, prefix, selectTypes } = this.state;
-      if (handphone ==='' || prefix ==='') { return Empty() }
+      let { id, handphone, selectProv, selectTypes } = this.state;
+      if (handphone ==='' || selectProv ==='') { return Empty() }
       this.setState({ modalVisible: true })
 
-      let result = await axios.get(eNetDenom() + id +'/'+ prefix +'/'+ this.state.selectTypes)
+      let result = await axios.get(eNetDenom() + id +'/'+ selectProv +'/'+ selectTypes)
       let data = result.data.data
       let values = data.map(i => ({
         vtype: i.vtype,
@@ -211,12 +232,7 @@ _onRetireveNumberPhoneContact = async () => {
           this.setState({ 
             contacts: results, 
             modalContact: true, 
-            isShowNominal: true 
           })
-            setTimeout(() => {
-              this._onRetrieveValueDataPrefix()
-            }, 1500);
-         
         }
       })
     })
@@ -244,7 +260,9 @@ _onRetireveNumberPhoneContact = async () => {
   render() {
     let { 
       handphone, denom, denomPrice, counter, ArrDenom, ArrTypes, modalVisible, refreshing, isShowNominal,
-      isBuying, isChecking, isClicking, selectTypes, isShowPhone, modalContact, contacts
+      isBuying, isChecking, isClicking, selectTypes, isShowPhone, modalContact, contacts,
+      isShowProvider, provider, selectProv
+    
     } = this.state;
     let { 
       contentStyle, contentBg, contentRender, cardStyles, footerStyles, SubmitStyle, 
@@ -274,10 +292,28 @@ _onRetireveNumberPhoneContact = async () => {
                     onPress={this._onRetireveNumberPhoneContact}
                   />
               </Item>
-              <Text style={textItemPrefix}>{this.state.prefix}</Text>
+            
+            
+            {isShowProvider ? 
+            <View>
+              <Label style={selectProv ? textItemA:textItemIn} >Pilih Provider</Label>
+              <Item>
+                  <Icon name="ios-repeat" style={selectProv ? iconAStyles : iconInStyles}/>
+                  <PickerDroid 
+                    selectedValue={selectProv}
+                    onValueChange={this._onRetrieveSelectProvider}
+                  >
+                  {provider.map((i,j) => 
+                    <Picker.Item label={i} value={i} key={j}/>
+                    )}
+                </PickerDroid>
+              </Item>
+            </View>:null
+            }
+
             {isShowPhone ? 
             <View>
-              <Label style={selectTypes ? textItemA:textItemIn} >Select Type</Label>
+              <Label style={selectTypes ? textItemA:textItemIn} >Pilih Jenis || Type</Label>
               <Item>
                   <Icon name="ios-repeat" style={selectTypes ? iconAStyles : iconInStyles}/>
                   <PickerDroid 
@@ -291,7 +327,7 @@ _onRetireveNumberPhoneContact = async () => {
               </Item>
             </View>:null
             }
-            
+
             {isShowNominal ? 
             <View>
               <Item floatingLabel>
@@ -331,7 +367,7 @@ _onRetireveNumberPhoneContact = async () => {
               {isChecking? <CheckedData onPress={() => this.props.navigation.navigate('process')} /> : <Processed />}
               </Content> : 
               <Content>
-              {isBuying? <Text>Beli Pulsa</Text>: null}
+              {isBuying? <Text>Beli Paket</Text>: null}
               </Content>
             }
         </Content>
@@ -364,7 +400,7 @@ _onRetireveNumberPhoneContact = async () => {
         renderItem={({item}) => 
         <ContactItem item={item} onPress={() => 
           this.setState({ 
-            handphone: item.number.replace('+62', '0').replace('-', '').replace('-', ''), modalContact:false,
+            handphone: item.number, modalContact:false, isShowProvider: true
           })}
           />
         }

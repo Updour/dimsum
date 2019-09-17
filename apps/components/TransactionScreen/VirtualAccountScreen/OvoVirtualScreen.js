@@ -63,6 +63,9 @@ export default class OvoVirtualScreen extends Component {
   // show chilf form render
   _onShowingChildMenuForm = value => {
     this.setState({ input: value }, () => {
+      if (this.state.input) {
+        this.setState({ isShowButton: true })
+      }
       if (this.state.input.length === 10) {
         this._onRetreiveValueDataCodeVoucher()
         this.setState({ isShowButton: true })

@@ -22,7 +22,14 @@ export const ApiMenuActivity = {
       nav: 'transfer',
       img: require('../../../../../assets/images/activity/transfer.png')
     },
-    
+    // xm or sd
+    {
+      name: 'Transaksi Manual',
+      text: 'Untuk transaksi manual ',
+      code: 'xsd',
+      nav: 'manualTrx',
+      img: require('../../../../../assets/images/activity/manual.png')
+    },
     {
       name: 'Deposit',
       text: 'Untuk Deposit Via Bank',
@@ -30,13 +37,7 @@ export const ApiMenuActivity = {
       nav: 'topUp',
       img: require('../../../../../assets/images/activity/ticket.png')
     },
-    {
-      name: 'Manual Transaksi',
-      text: 'Untuk Manual transaksi',
-      code: 'sd',
-      nav: 'manualTrx',
-      img: require('../../../../../assets/images/activity/manual.png')
-    },
+    
 
     {
       name: 'Data Downline',

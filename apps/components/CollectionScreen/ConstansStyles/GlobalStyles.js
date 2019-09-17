@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
   textStyles: {
     fontFamily: 'roboto'
   },
+  //form account styles text
+  aTextStyles: {
+    fontFamily: 'roboto',
+    fontSize: 15,
+    color: '#3b3b3b'
+  },
   contentStyle: {
     backgroundColor: '#f2f2f2' //f5fdff
   },

@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { Animated, Easing } from 'react-native'
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import MainMenuBottomScreen from '../TabBottomScreen'
@@ -12,7 +13,7 @@ import AuthenticationScreen from '../AuthenticationScreen/AuthenticationScreen'
 // transctionscreen eletric
 import EletricRegularScreen from '../TransactionScreen/EletricScreen/EletricRegularScreen'
 import EletricPacketScreen from '../TransactionScreen/EletricScreen/EletricPacketScreen'
-
+import Midtrans from '../TransactionScreen/EletricScreen/midtrans'
 // ppob screen
 import PlnPpobScreen from '../TransactionScreen/PpobScreen/PlnPpobScreen'
 import PgnPpobScreen from '../TransactionScreen/PpobScreen/PgnPpobScreen'
@@ -74,8 +75,16 @@ import HelpScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildCo
 import AboutScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/AboutScreen'
 import PrivacyAndPolicyScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/PrivacyAndPolicyScreen'
 
+// tes
+import MAP from '../testers/map'
+import Chats from '../testers/Chat'
+
+
+
 const StackRouterScreen = createStackNavigator({
-    
+    chat: { screen: Chats },
+    map: { screen: MAP },
+    // midtrans: { screen: Midtrans },
     auth: { screen: AuthenticationScreen },
     
     // tab screen
@@ -148,7 +157,35 @@ const StackRouterScreen = createStackNavigator({
     allMenu: { screen: ListMenuGlobal }
   }, 
   {
-    headerMode: 'none'
+    headerMode: 'none',
+    transitionConfig
   })
+const transitionConfig = () => {
+  return {
+    transitionSpec: {
+      duration: 500,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+      useNativeDriver: true,
+    },
+    screenInterpolator: sceneProps => {
+      const { layout, position, scene } = sceneProps;
+
+      const thisSceneIndex = scene.index;
+      const width = layout.initWidth;
+
+      const translateX = position.interpolate({
+        inputRange: [thisSceneIndex - 1, thisSceneIndex],
+        // outputRange: [-width, 0], if left
+        outputRange: [width, 0], //if right
+        extrapolate: 'clamp'
+      });
+
+      return {
+        transform: [{ translateX }]
+      }
+    }
+  }
+}
 
 export default createAppContainer(StackRouterScreen)

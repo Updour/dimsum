@@ -55,3 +55,7 @@ export const setNotifHp= () => {
 ToastAndroid.show(' contoh: * 08234567890', ToastAndroid.LONG);	
 }
 
+export const setNotifSet= () => {
+ToastAndroid.show(' Minimal Setting Bonus Rp. 50 Dan Maximal Rp. 400', ToastAndroid.SHORT);	
+}
+

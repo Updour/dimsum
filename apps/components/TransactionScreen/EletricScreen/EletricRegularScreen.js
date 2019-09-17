@@ -11,7 +11,7 @@ import {
 } from 'native-base'
 import { Col, Grid } from "react-native-easy-grid";
 import { 
-  netUsers, eNetPrefix, eNetDenom, netInbox, timer, types, Empty, styles,
+  netUsers, eNetPrefix, eNetDenom,reloaded, netInbox, timer, types, Empty, styles,
   ModalPopUp, PrefixNull, ReloadScreen, PleaseWait, Processed, Denied,
   formatPrice, timers, CheckedData, ReadingContact, Prefix, ModalContact, ContactItem
 } from '../../CollectionScreen'
@@ -45,10 +45,14 @@ export default class EletricRegularScreen extends Component {
   componentDidMount() {
     this._isMounted = true;
     this._onRetrieveValueDataStorage()
+    this._interval = setInterval(() => {
+      this._onRetrieveValueDataPrefix()
+    }, reloaded());
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    clearInterval(this._interval)
   }
 
   // retrieve storage
@@ -67,29 +71,30 @@ export default class EletricRegularScreen extends Component {
   // provider
   _onRetrieveValueDataPrefix = async () => {
     try {
-      // let uri = eNetPrefix() + this.state.handphone.substring(0, 4) 
+      let uri = eNetPrefix() + this.state.handphone.substring(0, 4) 
       // console.log('a',uri)
-      let results = await axios.get(eNetPrefix() + this.state.handphone.substring(0, 4) )
+      // let results = await axios.get(eNetPrefix() + this.state.handphone.substring(0, 4))
+      let results = await axios.get(uri)
       let data = results.data.data[0].opr_pref
-      if (this._isMounted) { this.setState({ prefix: data })}
+      if (this._isMounted) { this.setState({ prefix: data, isShowNominal: true })}
     }catch(err) {
       throw err;
     }
   }
 
+
   // check e number
   _onCheckNumberRenderPrefix = value => {
     this.setState({ handphone : value }, () => {
-      
+      console.log('a', this.state.handphone)
       if (this.state.handphone.length === 4) {
         this._onRetrieveValueDataPrefix()
       }
-
       if (this.state.handphone.length === 10) {
         this._onRetrieveValueDataDenom()
           setTimeout(() => {
             this.setState({ isShowNominal : true })
-          }, 2000);
+          }, 1000);
       }
     })
   }
@@ -144,7 +149,7 @@ export default class EletricRegularScreen extends Component {
       }))
       this.setState({ ArrDenom: values, refreshing: false })
     }catch(err) {
-      console.log(err)
+      throw err;
     }
   }
 
@@ -191,8 +196,7 @@ export default class EletricRegularScreen extends Component {
           })
             setTimeout(() => {
               this._onRetrieveValueDataPrefix()
-            }, 1500);
-         
+            }, 1000);
         }
       })
     })
@@ -206,8 +210,6 @@ _onRetrieveContactSearch = text => {
     });
     this.setState({ isContacts: newData, search: text });
   }
-
-  
   // 
   _onReloadScreenAndData = () => {
     this.setState({ 
@@ -324,7 +326,8 @@ _onRetrieveContactSearch = text => {
         renderItem={({item}) => 
         <ContactItem item={item} onPress={() => 
           this.setState({ 
-            handphone: item.number.replace('+62', '0').replace('-', '').replace('-', ''), modalContact:false,
+            handphone: item.number.replace('+62', '0').replace('-', '').replace('-', ''), 
+            modalContact:false
           })}
           />
         }

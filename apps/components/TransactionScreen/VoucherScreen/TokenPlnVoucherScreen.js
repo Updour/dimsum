@@ -96,6 +96,10 @@ export default class TockenPlnVoucherScreen extends Component {
   // show chilf form render
   _onShowingChildMenuForm = value => {
   	this.setState({ input: value }, () => {
+      // console.log('a', this.state.input)
+      if (this.state.input) {
+        this.setState({ isShowButton: true })
+      }
   		if (this.state.input.length === 9) {
   			this._onRetreiveValueDataCodeVoucher()
   		}

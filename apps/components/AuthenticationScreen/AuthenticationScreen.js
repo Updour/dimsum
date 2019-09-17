@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
 
 import { StackActions, NavigationActions } from 'react-navigation';
-import { ScrollView } from 'react-native'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import { 
   Container, Content, Form, Item, Input, Label,
   Icon, Text, Switch, Card,
@@ -157,52 +157,44 @@ export default class AuthenticationScreen extends Component {
       <Container style={styles.contentStyle}>
       <AuthenticationHeader />
       <ScrollView>
-        <Content >
         <Content style={{ backgroundColor: '#000000', top: -80}}/>
         <Card style={cardStyles}>
-            <Form style={formStyles}>
-            <Item floatingLabel rounded style={itemStyles}>
-              <Label style={hp ? labelInaFocus : labelFocus }>
-                Nomor Handphone
-              </Label>
-              <Input style={inputStyles}
+          <Form>
+            <Item stackedLabel style={itemStyles}>
+             <Icon active name='ios-person' style={hp ? iconInaFocus : iconFocus }/>
+              <Label style={hp ? labelInaFocus : labelFocus }>Nomor Handphone</Label>
+              <Input 
                 keyboardType='phone-pad'
                 onChangeText={hp => this.setState({hp})}
                 value={hp}
+                // autoFocus
               />
-              <Icon active name='ios-person' style={hp ? iconInaFocus : iconFocus }/>
             </Item>
-            <Item floatingLabel rounded style={itemStyles}>
-              <Label style={pin ? labelInaFocus : labelFocus }>
-                Pin atau Kata Sandi
-              </Label>
-              <Input style={inputStyles}
+            <Item stackedLabel last style={itemStyles}>
+            <Icon name={isPinSwitches ? 'ios-lock' : 'ios-unlock'} 
+                style={pin ? iconInaFocus : iconFocus} 
+                onPress={this._onVisibleIconPinSwicthes}
+                />
+              <Label style={pin ? labelInaFocus : labelFocus }>Pin</Label>
+              <Input 
                 secureTextEntry= {isPinSwitches}
                 onChangeText={pin => this.setState({pin})}
                 value={pin}
               />
-              <Icon active name={isPinSwitches ? 'ios-lock' : 'ios-unlock'} 
-                style={pin ? iconInaFocus : iconFocus} 
-                onPress={this._onVisibleIconPinSwicthes}
-              />
             </Item>
-            <Item floatingLabel rounded style={itemStyles}>
-              <Label style={password ? labelInaFocus : labelFocus }>
-                Password
-              </Label>
+            <Item stackedLabel last style={itemStyles}>
+            <Icon name={isPasswordSwitches ? 'ios-eye-off' : 'ios-eye'} 
+                style={password ? iconInaFocus : iconFocus} 
+                onPress={this._onVisibleIconPasswordSwicthes}/>
+              <Label style={password ? labelInaFocus : labelFocus }>Password</Label>
               <Input 
                 style={inputStyles}
                 secureTextEntry= {isPasswordSwitches}
                 onChangeText={password => this.setState({password})}
                 value={password}
               />
-            <Icon active name={isPasswordSwitches ? 'ios-eye-off' : 'ios-eye'} 
-                style={password ? iconInaFocus : iconFocus} 
-                onPress={this._onVisibleIconPasswordSwicthes}
-              />
             </Item>
           </Form>
-          
         <Switch
           onValueChange={(value) => this._onShowWhenSelectSwitches(value)}
           style={switchStyles}
@@ -220,7 +212,6 @@ export default class AuthenticationScreen extends Component {
           </Submit>}
           </Content>
         </Card>
-        </Content>
       </ScrollView>
       </Container>
     );

@@ -6,6 +6,7 @@ import { StyleSheet } from 'react-native';
 
 const AuthStyles = StyleSheet.create({
   formStyles: {
+    marginTop: 10,
     marginLeft: 12,
     marginRight: 12,
   },
@@ -17,40 +18,43 @@ const AuthStyles = StyleSheet.create({
   },
   itemStyles:{
     borderColor: 'red',
-    fontWeight: 'bold'
+    marginRight: 12,
+    borderWidth: 1,
+    marginLeft: 20,
   },
   inputStyles:{
-    marginLeft: 15,
+    marginLeft: 20,
+    fontFamily: 'roboto'
   },
   iconInaFocus: {
-    marginBottom: 13,
-    marginLeft: 7,
+    // marginBottom: 13,
+    marginLeft: 12,
     color: 'red'
   },
   iconFocus: {
-    marginBottom: 13,
-    marginLeft: 7,
+    // marginBottom: 13,
+    marginLeft: 12,
     color: '#8c8c8c'
   },
   iconLabel: {
-   marginBottom: 13,
-   marginLeft: 7,
+   // marginBottom: 13,
+   marginLeft: 12,
    color: 'red'
  },
  iconInaLabel: {
-   marginBottom: 13,
-   marginLeft: 7,
+   // marginBottom: 13,
+   marginLeft: 12,
    color: '#8c8c8c'
  },
  labelFocus: {
-  marginLeft: 17,
-  marginTop: 2,
+  // marginLeft: 17,
+  // marginTop: 2,
   fontFamily: 'roboto',
   color: '#333333'
 },
 labelInaFocus: {
-  marginLeft: 17,
-  marginTop: 2,
+  // marginLeft: 17,
+  // marginTop: 2,
   fontFamily: 'roboto',
   color: 'blue'
 },

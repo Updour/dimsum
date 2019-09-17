@@ -70,7 +70,7 @@ export default class AccountComponentScreen extends Component {
   render() {
   	let { id, name, hp, reBalance, ket, activeDate, listDate }= this.state;
   	let { lCardStyle, textId, textbalance, textCity, cardList, textCard } = ListStyles;
-  	let { cardStyles, textStyles, iconAStyles, iconInStyles, labelAStyles, labelInStyles } = styles;
+  	let { cardStyles, textStyles, aTextStyles, iconAStyles, iconInStyles, labelAStyles, labelInStyles } = styles;
   	let { navigate } = this.props.navigation;
   	return (
   		<Content>
@@ -100,7 +100,7 @@ export default class AccountComponentScreen extends Component {
 			  		</Left>
 			  		<Body>
 				  		<Text note style={name ? labelAStyles:labelInStyles}>ID Pengguna</Text>
-				  		<Text style={textStyles}>{name}</Text>
+				  		<Text style={aTextStyles}>{name}</Text>
 			  		</Body>
 		  		</ListItem>
 		  		<ListItem avatar>
@@ -109,7 +109,7 @@ export default class AccountComponentScreen extends Component {
 			  		</Left>
 			  		<Body>
 				  		<Text note style={hp ? labelAStyles:labelInStyles}>Nomor Handphone</Text>
-				  		<Text style={textStyles}>{hp}</Text>
+				  		<Text style={aTextStyles}>{hp}</Text>
 			  		</Body>
 		  		</ListItem>
 		  		<ListItem avatar>
@@ -118,7 +118,7 @@ export default class AccountComponentScreen extends Component {
 			  		</Left>
 			  		<Body>
 				  		<Text note style={activeDate ? labelAStyles:labelInStyles}>Tanggal Aktif</Text>
-				  		<Text style={textStyles}>{formatDate(activeDate)}</Text>
+				  		<Text style={aTextStyles}>{formatDate(activeDate)}</Text>
 			  		</Body>
 		  		</ListItem>
 		  		<ListItem avatar>
@@ -127,7 +127,7 @@ export default class AccountComponentScreen extends Component {
 			  		</Left>
 			  		<Body>
 				  		<Text note style={listDate ? labelAStyles:labelInStyles}>Tanggal Daftar</Text>
-				  		<Text style={textStyles}>{formatDate(listDate)}</Text>
+				  		<Text style={aTextStyles}>{formatDate(listDate)}</Text>
 			  		</Body>
 		  		</ListItem>
 	  		</Content>
@@ -169,7 +169,7 @@ export default class AccountComponentScreen extends Component {
 			  		</Left>
 			  		<Body>
 				  		<TouchableOpacity onPress={()=> navigate(nav)}>
-				  			<Text style={textStyles}>{name}</Text>
+				  			<Text style={aTextStyles}>{name}</Text>
 				  		</TouchableOpacity>
 			  		</Body>
 			  		<Right>

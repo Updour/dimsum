@@ -4,9 +4,12 @@ import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
-import { View, FlatList } from 'react-native';
-import { Container, Content, Text } from 'native-base'
-import { netCheking, timer, ReloadScreen, MaterialIndicator } from '../../CollectionScreen'
+import { View, FlatList, TouchableOpacity } from 'react-native';
+import { Container, Header, Content, Text, Footer } from 'native-base'
+import { 
+  netCheking, timer, ReloadScreen, MaterialIndicator, styles, Statusbar,
+  
+} from '../../CollectionScreen'
 import ResponseProcessing from './PropsResponse/ResponseProcessing'
 
 export default class ProcessingData extends Component {
@@ -52,7 +55,12 @@ export default class ProcessingData extends Component {
   }
 
   _onWhenRenderIsEmpty = () => (
-    <View style={{ justifyContent: 'center', alignContent: 'center', flex: 1}}>
+    <View style={{ 
+      flex: 1,
+      justifyContent: 'center', 
+      alignContent: 'center',
+      marginTop: 30
+    }}>
     <MaterialIndicator />
       <Text style={{ flex: 1, textAlign:'center', marginLeft: 14, marginRight: 14, fontFamily: 'roboto' }}>
         Mohon Tunggu, Sedang Memuat Data,
@@ -63,11 +71,13 @@ export default class ProcessingData extends Component {
   render() {
     return (
     	<Container>
+      <Header style={styles.headerStyles}/>
+      <Statusbar />
     	<ReloadScreen 
     		refreshing={this.state.refreshing}
         onRefresh={this._onReloadScreenAndData}
     	>
-    		<Content>
+    		<Content >
     			<FlatList
             data = {this.state.process}
             keyExtractor={(i, j) => j.toString()}
@@ -77,6 +87,12 @@ export default class ProcessingData extends Component {
           />
     		</Content>
     		</ReloadScreen>
+          <Footer style={styles.footerStyles}>
+          <TouchableOpacity style={styles.SubmitStyle}
+          onPress={() => this.props.navigation.navigate('purchase')}>
+          <Text style={styles.textStyle}>Cek Status</Text>
+          </TouchableOpacity>
+          </Footer>
     	</Container>
     );
   }

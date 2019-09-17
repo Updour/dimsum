@@ -8,7 +8,7 @@ import { Container, Content, Text, Form, Item, Label, Input } from 'native-base'
 import { FlatList, ToastAndroid } from 'react-native';
 import { 
 	netDownline, netSetBonus, Submit, styles, ModalPopUp, WaveIndicator, ReloadScreen,
-	setSuccess
+	setSuccess, setNotifSet
 } from '../../CollectionScreen'
 
 import HeaderSettingBonus from './PropsHeader/HeaderSettingBonus'
@@ -19,7 +19,7 @@ export default class SettingBonusScreen extends Component {
 	state = {
 		downline: [],
 		refreshing: false,
-		modalVisible: false
+		modalVisible: false,
 	}
 	componentDidMount() {
 		this._isMounted = true;
@@ -79,7 +79,20 @@ export default class SettingBonusScreen extends Component {
 	}
 	// update 
 	_onSetItemUpdateDataDownlineById = async () => {
-		try{ 
+		let { 
+      telkomsel, indosat, xl, smartfren, three, axis, pln 
+    } = this.state;
+
+    if (telkomsel > 400 || telkomsel < 50 ||
+      indosat > 400 || indosat < 50 ||
+      xl > 400 || xl < 50 || 
+      smartfren > 400 ||  smartfren < 50 ||
+      three > 400 ||  three < 50 ||
+      axis > 400 ||  axis < 50 ||
+      pln > 400 ||  pln < 50) {
+      return setNotifSet()
+    }
+    try{
 			let puts = {
 				pdsub1: this.state.telkomsel, 
         pdsub2: this.state.indosat,
@@ -99,6 +112,31 @@ export default class SettingBonusScreen extends Component {
 			throw err;
 		}
 	}
+  // 
+  // _onChangeReplaceTelkomsel = text => {
+  //   this.setState({ 
+  //     telkomsel: text
+  //   }, () => {
+  //      if (this.state.telkomsel >= '400') {
+  //       setNotifSet()
+  //     }
+  //   })
+  // }
+  // indosat
+  // _onChangeReplaceIndosat = text => {
+  //   this.setState({ 
+  //     indosat: text
+  //   }, () => {
+  //     if (this.state.indosat){
+  //       this.setState({ 
+  //         indosat: text.replace(/[^0-9]/g, '').replace('5', '4').replace('6', '4').replace('7', '4')
+  //         .replace('8', '4').replace('9', '4').substring(0, 3)
+  //       })
+  //     } else {
+  //       setNotifSet()
+  //     }
+  //   })
+  // }
 	// 
 	_onReloadScreenAndData = () => {
     this.setState({
@@ -152,17 +190,19 @@ export default class SettingBonusScreen extends Component {
 	      		  <Item floatingLabel >
                 <Label style={telkomsel ? labelAStyles: labelInStyles}>Telkomsel</Label>
                 <Input
-                	onChangeText={text => this.setState({telkomsel: text.replace(/[^0-9]/g, '')})}
+                	onChangeText={telkomsel => this.setState({telkomsel})}
                   value={telkomsel}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		  <Item floatingLabel >
                 <Label style={indosat ? labelAStyles: labelInStyles}>Indosat</Label>
                 <Input
-                	onChangeText={text => this.setState({indosat: text.replace(/[^0-9]/g, '')})}
+                	onChangeText={indosat => this.setState({indosat})}
                   value={indosat}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		  <Item floatingLabel >
@@ -171,6 +211,7 @@ export default class SettingBonusScreen extends Component {
                 	onChangeText={text => this.setState({xl: text.replace(/[^0-9]/g, '')})}
                   value={xl}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		  <Item floatingLabel >
@@ -179,6 +220,7 @@ export default class SettingBonusScreen extends Component {
                 	onChangeText={text => this.setState({smartfren: text.replace(/[^0-9]/g, '')})}
                   value={smartfren}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		  <Item floatingLabel >
@@ -187,6 +229,7 @@ export default class SettingBonusScreen extends Component {
                 	onChangeText={text => this.setState({three: text.replace(/[^0-9]/g, '')})}
                   value={three}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		  <Item floatingLabel >
@@ -195,6 +238,7 @@ export default class SettingBonusScreen extends Component {
                 	onChangeText={text => this.setState({axis: text.replace(/[^0-9]/g, '')})}
                   value={axis}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		  <Item floatingLabel >
@@ -203,6 +247,7 @@ export default class SettingBonusScreen extends Component {
                 	onChangeText={text => this.setState({pln: text.replace(/[^0-9]/g, '')})}
                   value={pln}
                   keyboardType='phone-pad'
+                  maxLength={3}
                 />
               </Item>
 	      		</Form>

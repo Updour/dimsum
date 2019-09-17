@@ -16,6 +16,13 @@ export const sNetPrefix = () => (
   uri =urlMetrikPulsa() + 'prefix/'
 )
 
+// paket data
+export const eNetProvider = () => (
+	uri= urlXmetrik() +  'provider'
+)
+export const sNetProvider = () => (
+	uri= urlXmetrik() +  'provider'
+)
 // for paket data type tsel isat
 export const eNetTypePacket = () => (
   uri = urlXmetrik() + 'jenis'

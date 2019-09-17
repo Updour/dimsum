@@ -5,7 +5,6 @@ import android.app.Application;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
-import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;

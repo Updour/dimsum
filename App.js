@@ -10,10 +10,11 @@ import React from 'react';
 
 import MainMenuBottomScreen from './apps/components/TabBottomScreen'
 import StackRouterScreen from './apps/components/StackRouterScreen'
+import MapView from 'react-native-maps';
 
 const App = () => {
   return (
-        <StackRouterScreen />
+         <StackRouterScreen />
   );
 };
 export default App;

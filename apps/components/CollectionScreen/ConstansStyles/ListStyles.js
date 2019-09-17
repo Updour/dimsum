@@ -148,7 +148,7 @@ const ListStyles = StyleSheet.create({
 
   // for acccount
   cardList: {
-    backgroundColor: '#f7fff5', 
+    backgroundColor: '#f5f5f5', 
     marginLeft: 10, 
     marginRight: 10, 
     borderRadius: 15

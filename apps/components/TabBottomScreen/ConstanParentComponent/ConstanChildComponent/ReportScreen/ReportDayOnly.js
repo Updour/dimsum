@@ -75,7 +75,7 @@ export default class ReportDayOnly extends Component {
 		this.setState({
 			isModal: true, agenid: agenid, area: area, harga: harga,
 			ket_sts: ket_sts,	number_reorder: parseInt(number_reorder),	provider: provider,	tanggal: tanggal,
-			tipe: tipe,	tujuan: tujuan,	vsn: parseInt(vsn),
+			tipe: tipe,	tujuan: tujuan,	vsn: vsn,
 		})
 	}
 

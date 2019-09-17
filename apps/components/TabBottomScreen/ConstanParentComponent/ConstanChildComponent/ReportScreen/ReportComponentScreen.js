@@ -14,7 +14,7 @@
  	Dimensions,
  	processColor
  } from 'react-native';
- import { BarChart, LineChart, PieChart } from 'react-native-charts-wrapper'
+ // import { BarChart, LineChart, PieChart } from 'react-native-charts-wrapper'
  import _ from 'lodash'
  import axios from 'axios'
  import { formatDateChart, formatPrice } from '../../../../CollectionScreen'

@@ -59,7 +59,7 @@ export default class TransferSaldoScreen extends Component {
 	_onSetItemSaveDataBalanceTransfer = async () => {
 		try { 
 			let { transfer, nominal, userID, id, hp, pin, types, } = this.state;
-			if (nominal === '' || userID ==='' ) {	return Empty() }
+			if (nominal === '' || userID === '' ) {	return Empty() }
 				this.setState({ isClicked: true })
 			let posts = {
 				in_hpnumber: hp,
@@ -68,7 +68,6 @@ export default class TransferSaldoScreen extends Component {
 				tipe: types
 			}
 			let items = await axios.post(netInbox(), posts)
-			console.log(items)
 			setTimeout(() => {
 				this.setState({ isClicked: false })
 			}, timers());
@@ -81,7 +80,8 @@ export default class TransferSaldoScreen extends Component {
 		try {
 			let results = await axios.get(netOutbox() + this.state.id)
 			let data = results.data.data[0].out_message
-			if (this._isMounted) { setTimeout(() => {
+			if (this._isMounted) { 
+				setTimeout(() => {
 				this.setState({ reply: data, isClicked: false, refreshing: false })
 			}, timers());}
 		}catch(err) {

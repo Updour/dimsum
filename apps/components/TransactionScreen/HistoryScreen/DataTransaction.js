@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
-import { View, FlatList } from 'react-native';
-import { Container, Content, Text } from 'native-base'
-import { netDataTrx, timer, ReloadScreen, MaterialIndicator } from '../../CollectionScreen'
+import { View, FlatList, TouchableOpacity } from 'react-native';
+import { Container, Header, Content, Text, Footer} from 'native-base'
+import { 
+  netDataTrx, timer, ReloadScreen, MaterialIndicator, styles, Statusbar
+} from '../../CollectionScreen'
 import ResponseProcessing from './PropsResponse/ResponseProcessing'
 
 export default class DataTransaction extends Component {
@@ -36,9 +38,7 @@ export default class DataTransaction extends Component {
   _onRetrieveDataProcessed = async () => {
   	try{
   		let result =  await axios.get(netDataTrx() + this.state.id)
-  		console.log(result)
   		let data = result.data.data
-  		console.log(data)
   		if (this._isMounted) {
   			this.setState({ purchase : data, refreshing: false })
   		}
@@ -52,7 +52,7 @@ export default class DataTransaction extends Component {
   }
 
   _onWhenRenderIsEmpty = () => (
-    <View>
+    <View style={{ marginTop: 30 }}>
     <MaterialIndicator />
       <Text style={{ flex: 1, textAlign:'center', marginLeft: 14, marginRight: 14, fontFamily: 'roboto' }}>
           Mohon Tunggu, Sedang Memuat Data
@@ -62,6 +62,8 @@ export default class DataTransaction extends Component {
   render() {
     return (
     	<Container>
+      <Header style={styles.headerStyles}/>
+      <Statusbar />
     	<ReloadScreen 
     		refreshing={this.state.refreshing}
         onRefresh={this._onReloadScreenAndData}
@@ -75,6 +77,12 @@ export default class DataTransaction extends Component {
           />
     		</Content>
     		</ReloadScreen>
+        <Footer style={styles.footerStyles}>
+          <TouchableOpacity style={styles.SubmitStyle}
+          onPress={() => this.props.navigation.navigate('Inbox')}>
+          <Text style={styles.textStyle}>Cek Semua Transaksi</Text>
+          </TouchableOpacity>
+          </Footer>
     	</Container>
     );
   }

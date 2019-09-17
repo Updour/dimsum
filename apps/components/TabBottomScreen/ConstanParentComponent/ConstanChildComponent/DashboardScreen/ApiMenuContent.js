@@ -15,7 +15,7 @@ export const ApiMenuContent = [
     img: require('../../../../../assets/images/ppob/pln_pasca.png'),
   },
   {
-    name: 'Lihat ..',
+    name: 'Lengkap',
     nav: 'allMenu',
     img: require('../../../../../assets/images/dashboard/more.png'),
   },

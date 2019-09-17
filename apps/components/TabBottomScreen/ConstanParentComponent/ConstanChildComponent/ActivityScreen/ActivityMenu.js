@@ -30,18 +30,18 @@ export default class ActivityMenu extends Component {
         let parsed = JSON.parse(val)
         // md
         if (parsed.upline && parsed.dealer === '1') {
-         let results = this.state.activity.filter(x => x.code === "xm" || x.code === "sd")
+         let results = this.state.activity.filter(x => x.code === "xm" || x.code === "sd" || x.code === "xsd")
           this.setState({ userSd: results, isChangeMenu: false })
         }
         // sd
         if (parsed.upline === '1' && parsed.dealer !== '1') {
-          let result = this.state.activity.filter(x => x.code === "xm" || x.code === "sd")
+          let result = this.state.activity.filter(x => x.code === "xm" || x.code === "sd" || x.code === "xsd")
           this.setState({ userSd: result, isChangeMenu: false })
         }
 
         // xm
         if (parsed.upline !== '1' && parsed.dealer !== '1') {
-          let data = this.state.activity.filter(i => i.code === "xm")
+          let data = this.state.activity.filter(i => i.code === "xm" || i.code === "xsd")
           this.setState({ userXm: data, isChangeMenu: true })
         }
       } else {
@@ -58,7 +58,7 @@ export default class ActivityMenu extends Component {
     AsyncStorage.setItem('@activitys', JSON.stringify(ApiMenuActivity))
       setTimeout(() => {
         this._onRetrieveValueDataStorage()
-      }, 300);
+      }, 200);
   }
 
   // 

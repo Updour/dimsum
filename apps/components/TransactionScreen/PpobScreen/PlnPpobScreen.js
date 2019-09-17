@@ -146,7 +146,6 @@ export default class PlnPpobScreen extends Component {
 						      <Input 
 							      onChangeText={input => this.setState({input})}
 							      value={input}
-							      
 						      />
 				      </Item>
 			      </Form>
