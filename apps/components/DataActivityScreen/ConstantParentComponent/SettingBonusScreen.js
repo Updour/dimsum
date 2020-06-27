@@ -83,13 +83,13 @@ export default class SettingBonusScreen extends Component {
       telkomsel, indosat, xl, smartfren, three, axis, pln 
     } = this.state;
 
-    if (telkomsel > 400 || telkomsel < 50 ||
-      indosat > 400 || indosat < 50 ||
-      xl > 400 || xl < 50 || 
-      smartfren > 400 ||  smartfren < 50 ||
-      three > 400 ||  three < 50 ||
-      axis > 400 ||  axis < 50 ||
-      pln > 400 ||  pln < 50) {
+    if (telkomsel > 500 || telkomsel < 50 ||
+      indosat > 500 || indosat < 50 ||
+      xl > 500 || xl < 50 || 
+      smartfren > 500 ||  smartfren < 50 ||
+      three > 500 ||  three < 50 ||
+      axis > 500 ||  axis < 50 ||
+      pln > 500 ||  pln < 50) {
       return setNotifSet()
     }
     try{
@@ -117,7 +117,7 @@ export default class SettingBonusScreen extends Component {
   //   this.setState({ 
   //     telkomsel: text
   //   }, () => {
-  //      if (this.state.telkomsel >= '400') {
+  //      if (this.state.telkomsel >= '500') {
   //       setNotifSet()
   //     }
   //   })

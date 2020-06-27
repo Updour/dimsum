@@ -10,11 +10,19 @@ export const formatPrice = (value) => {
 export const formatDate = (value) => {
 	if (! value) return ''
 		value = value.toString()
-	return moment(value).format('DD/MM/YYYY HH:mm:ss')
+	return moment(new Date(value)).format('DD/MM/YYYY HH:mm:ss')
 }
+
 // format date
 export const formatDateChart = (value) => {
 	if (! value) return ''
 		value = value.toString()
-	return moment(value).format('DD/MM/YYYY')
+	return moment(new Date(value)).format('DD/MM/YYYY')
 }
+/*format print out*/
+export const formatDatePrint = (value) => {
+	if (! value) return ''
+		value = value.toString()
+	return moment(new Date(value)).format('YYYY-MM-DD')
+}
+

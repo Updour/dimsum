@@ -43,10 +43,10 @@ const ResponseProcessing = ({ item, onPress }) => {
           </Body>
           <Right>
             <Text selectable style={lTextStyle}>
-            { ket_sts === 'TRX PENDING' && <Text selectable style={lPendingStyle}>Pending</Text>}
-            { ket_sts === 'TRX SUCCESS' && <Text selectable style={lSuccessStyle}>Success</Text>  }
-            { ket_sts === 'TRX FAIL' && <Text selectable style={lFailedStyle}>Failed</Text>  }
-            { ket_sts === 'TRX TOPUP' && <Text selectable style={lPendingStyle}>TopUp</Text>}
+            { ket_sts === 'TRX PENDING' && <Text selectable style={lPendingStyle}>Antri</Text>}
+            { ket_sts === 'TRX SUCCESS' && <Text selectable style={lSuccessStyle}>Sukses</Text>  }
+            { ket_sts === 'TRX FAIL' && <Text selectable style={lFailedStyle}>Gagal</Text>  }
+            { ket_sts === 'TRX TOPUP' && <Text selectable style={lPendingStyle}>Proses</Text>}
             </Text>
           </Right>
         </ListItem>

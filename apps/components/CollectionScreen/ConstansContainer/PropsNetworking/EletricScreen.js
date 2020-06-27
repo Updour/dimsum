@@ -15,6 +15,14 @@ export const eNetPrefix = () => (
 export const sNetPrefix = () => (
   uri =urlMetrikPulsa() + 'prefix/'
 )
+// all opr 
+export const eNetAllPrefix = () => (
+  uri =urlXmetrik() + 'prefixbyus/'
+)
+export const sNetAllPrefix = () => (
+  uri =urlMetrikPulsa() + 'prefixbyus/'
+)
+
 
 // paket data
 export const eNetProvider = () => (

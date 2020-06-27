@@ -1,50 +1,57 @@
-import React, { Component } from 'react';
+// @flow
+import React from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { View, TouchableOpacity } from 'react-native'
+
 import { GiftedChat } from 'react-native-gifted-chat'; // 0.3.0
+import Fire from '../config/Fire';
 
-import firebaseSDK from '../config/firebaseSDK';
-import firebase from 'firebase'
+type Props = {
+  name?: string,
+};
 
-export default class Chat extends Component {
+class Chat extends React.Component<Props> {
 
-	static navigationOptions = ({ navigation }) => ({
-		title: (navigation.state.params || {}).name || 'Chat!'
-	});
+  static navigationOptions = ({ navigation }) => ({
+    title: (navigation.state.params || {}).name || 'Chat!',
+  });
 
-	state = {
-		messages: []
-	};
+  state = {
+    messages: [],
+  };
 
-	getuser = () => {
-		return {
-			name: this.props.navigation.state.params.name,
-			email: this.props.navigation.state.params.email,
-			avatar: this.props.navigation.state.params.avatar,
-			id: firebaseSDK.uid,
-			_id: firebaseSDK.uid
-		};
-	}
+  componentDidMount() {
+    Fire.shared.on(message =>
+      this.setState(previousState => ({
+        messages: GiftedChat.append(previousState.messages, message),
+      }))
+    );
+  }
+  componentWillUnmount() {
+    Fire.shared.off();
+  }
+  get user() {
+    return {
+      name: this.props.navigation.state.params.name,
+      _id: Fire.shared.uid,
+    };
+  }
 
-	render() {
-		return (
-			<GiftedChat
-				messages={this.state.messages}
-				onSend={firebaseSDK.send}
-				user={this.user}
-			/>
-		);
-	}
+// 
 
-	componentDidMount() {
-		this.getuser()
-		
-	// }
-		// firebaseSDK.refOn(message =>
-		// 	this.setState(previousState => ({
-		// 		messages: GiftedChat.append(previousState.messages, message)
-		// 	}))
-		// );
-	}
-	// componentWillUnmount() {
-	// 	firebaseSDK.refOff();
-	// }
+render() {
+  return (
+    <View>
+    <GiftedChat
+    messages={this.state.messages}
+    onSend={Fire.shared.send}
+    user={this.user}
+    />
+    </View>
+    );
 }
+
+
+}
+
+export default Chat;

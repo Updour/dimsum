@@ -7,14 +7,24 @@
  */
 
 import React from 'react';
-
+import { View, StyleSheet, Button, NativeModules } from 'react-native'
 import MainMenuBottomScreen from './apps/components/TabBottomScreen'
 import StackRouterScreen from './apps/components/StackRouterScreen'
-import MapView from 'react-native-maps';
+/*<StackRouterScreen />*/
+
+const PrinterManager = NativeModules.PrinterManager;
 
 const App = () => {
   return (
-         <StackRouterScreen />
+    <StackRouterScreen />
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+});
 export default App;

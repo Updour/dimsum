@@ -11,7 +11,7 @@ export const ApiMenuContent = [
   },
   {
     name: 'PLN Pasca',
-    nav: 'pln',
+    nav: 'printPasca', //print pasca byar pln
     img: require('../../../../../assets/images/ppob/pln_pasca.png'),
   },
   {
@@ -32,15 +32,15 @@ export const ApiMenuVoucher = [
     nav: 'vGame',
     img: require('../../../../../assets/images/voucher/game.png'),
   },
-  {
-    name: 'TV',
-    nav: 'vTv',
-    img: require('../../../../../assets/images/voucher/tv.png'),
+   {
+    name: 'Link Aja',
+    nav: 'linkAja',
+    img: require('../../../../../assets/images/vAccount/linkaja.png'),
   },
   {
-    name: 'Pdam', //in ppob menu === bolt wayae
-    nav: 'pdam',
-    img: require('../../../../../assets/images/ppob/pdam.png'),
+    name: 'ShopeePay',
+    nav: 'shopee',
+    img: require('../../../../../assets/images/vAccount/shopee.png'),
   },
 ]
 

@@ -7,12 +7,12 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
 // for header all component
-  headerStyles: {
-    backgroundColor: '#0000e6'
-  },
-  textStyles: {
-    fontFamily: 'roboto'
-  },
+headerStyles: {
+  backgroundColor: '#0000e6'
+},
+textStyles: {
+  fontFamily: 'roboto'
+},
   //form account styles text
   aTextStyles: {
     fontFamily: 'roboto',
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
 
-/*header form*/
+  /*header form*/
   footerStyles: {
     backgroundColor: '#f7f7f7'
   },
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   // for list response 
   defaultText: {
     flex: 1,
-   fontFamily: 'roboto',
+    fontFamily: 'roboto',
     alignSelf: 'flex-start',
     padding: 5,
     textAlign: 'left'
@@ -155,30 +155,30 @@ const styles = StyleSheet.create({
  },
  // For checking data
  // a = activity || for text screen activity
-  itemDateStart: {
+ itemDateStart: {
    marginTop: 8,
    marginLeft: 20,
    marginRight: 8,
    fontFamily: 'roboto',
    color: 'blue'
-  },
-  itemDateEnd: {
-    marginTop: 8,
-    marginLeft: 8,
-    marginRight: 20,
-    fontFamily: 'roboto',
-    color: '#333333'
-  },
-  aLabelAStyle: {
-    fontFamily: 'roboto',
-    color: 'red',
-    alignSelf: 'center'
-  },
-  aLabelInStyle: {
-    fontFamily: 'roboto',
-    color: '#333333',
-    alignSelf: 'center'
-  },
+ },
+ itemDateEnd: {
+  marginTop: 8,
+  marginLeft: 8,
+  marginRight: 20,
+  fontFamily: 'roboto',
+  color: '#333333'
+},
+aLabelAStyle: {
+  fontFamily: 'roboto',
+  color: 'red',
+  alignSelf: 'center'
+},
+aLabelInStyle: {
+  fontFamily: 'roboto',
+  color: '#333333',
+  alignSelf: 'center'
+},
 
   // for about app
   // ******8 c === complaint component ******8 \\
@@ -223,7 +223,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 8,
     fontFamily: 'roboto'
-  }
+  },
+  switchStyles: {
+    alignSelf:'flex-start', 
+    marginTop: 13,
+    marginLeft: 13
+  },
+  textSwitchStyles: { 
+    fontFamily: 'roboto',
+    color: '#000',
+    fontSize: 16
+  },
+  textInfoHeader: {
+   fontFamily: 'roboto',
+   color: 'red',
+   textAlign: 'center',
+   fontSize: 18,
+   marginTop: 8,
+   marginBottom: 2,
+ },
+ textInfoBody: {
+  fontFamily: 'roboto',
+  color: '#242526',
+  textAlign: 'center',
+  fontSize: 12,
+  marginBottom: 4,
+}
 });
 
 

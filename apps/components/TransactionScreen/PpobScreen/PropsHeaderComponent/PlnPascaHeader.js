@@ -21,11 +21,11 @@ export default class PlnPascaHeader extends Component {
         <Body>
           <Title style={textStyles}>PLN PASCA</Title>
         </Body>
-        <Right>
+       {/*<Right>
           <Button transparent onPress={onPress}>
           <Icon name="ios-refresh" />
           </Button>
-        </Right>
+        </Right>*/}
         <Statusbar />
       </Header>
       );

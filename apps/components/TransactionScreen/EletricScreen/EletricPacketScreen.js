@@ -6,13 +6,13 @@ import Contacts from 'react-native-contacts';
 import { Col, Grid } from "react-native-easy-grid";
 import axios from 'axios'
 
-import { View, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList, TouchableOpacity, Switch } from 'react-native';
 import { 
   Container, Content, Text, Card, Form, Item, Label, Picker, Icon, Input, Footer
 } from 'native-base'
 import { 
   netUsers, eNetProvider, eNetDenom, reloaded, eNetTypePacket, netInbox, timer, types, Empty, 
-  ModalPopUp, PickerDroid, ReloadScreen, PleaseWait, Processed, styles,
+  ModalPopUp, PickerDroid, ReloadScreen, PleaseWait, Processed, styles, NotifyResponse,
   formatPrice, timers, CheckedData, ReadingContact, Denied, ModalContact, ContactItem
 } from '../../CollectionScreen'
 
@@ -42,6 +42,7 @@ export default class EletricPacketScreen extends Component {
     isChecking: false,
     isClicking: false,
     modalContact: false,
+    isSwitchValue: false,
     types: types()
   }
 
@@ -141,7 +142,8 @@ export default class EletricPacketScreen extends Component {
     try {
       let result = await axios.get(netUsers() + this.state.id)
       let data = result.data.data
-      if (this._isMounted) { this.setState ({
+      if (this._isMounted) { 
+        this.setState ({
         refreshing: false,
         users : data,
         telkomsel: data.pdsub1 + data.pddist1,
@@ -193,20 +195,38 @@ export default class EletricPacketScreen extends Component {
 // buy eletric
   _onBuyingEletricPacketData = async () => {
     try {
-      let { handphone, denom, id, hp, pin, types, counter } = this.state;
+      let { handphone, denom, id, hp, pin, types, counter, isSwitchValue } = this.state;
       if (handphone ==='' || denom ==='' ) { return Empty() }
         this.setState({ isBuying: true, isClicking: true })
-      let posts = {
-        in_hpnumber: hp,
-        in_message: denom +'.'+ handphone +'.'+ pin +'.'+ counter,
-        agenid: id,
-        tipe: types
-      }
-      let response = await axios.post(netInbox(), posts)
-      setTimeout(() => {
-        console.log(response)
-        this.setState({ isBuying: false, isChecking: true, })
-      }, timers()); 
+      if (isSwitchValue === false) {
+        let posts = {
+          in_hpnumber: hp,
+          in_message: denom +'.'+ handphone +'.'+ pin,
+          agenid: id,
+          tipe: types
+        }
+        let response = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          NotifyResponse(response.data)
+          this.setState({ isBuying: false, isChecking: true, })
+        }, timers());
+         return;
+      } 
+        // true swith
+      let truePosts = {
+          in_hpnumber: hp,
+          in_message: denom +'.'+ handphone +'.'+ pin +'.'+ counter,
+          agenid: id,
+          tipe: types
+        }
+        let response = await axios.post(netInbox(), truePosts)
+        setTimeout(() => {
+         NotifyResponse(response.data)
+          this.setState({ isBuying: false, isChecking: true, })
+        }, timers());
+    
+      
+      
     } catch(err){
       throw err;
     }
@@ -246,28 +266,50 @@ _onRetireveNumberPhoneContact = async () => {
     });
     this.setState({ isContacts: newData, search: text });
   }
+
+
+     // switch to save data
+  _onLoopingTwoTransaction = value =>{
+    this.setState({ isSwitchValue: value })
+    if(value == true) {
+      const { handphone, denom } = this.state;
+      if (handphone === '' || denom === '') {
+        Empty()  
+        this.setState({ isSwitchValue: false })
+      } else {
+        this.state.counter++
+        this.setState({ isSwitchValue: true })
+      }
+    } else {
+      this.setState({ isSwitchValue: false, counter: 1 })
+    }
+  }
+
   // 
   _onReloadScreenAndData = () => {
     this.setState({ 
       refreshing: true, 
+      isSwitchValue: false,
+      isShowNominal: false,
       isChecking: '', 
       isClicking: '',
-      isShowNominal: '',
       isShowPhone: '',
-      handphone: ''
+      handphone: '',
+      counter: 1,
     }, ()=> this._onRetreiveValueDataUser())
   }
   render() {
     let { 
       handphone, denom, denomPrice, counter, ArrDenom, ArrTypes, modalVisible, refreshing, isShowNominal,
       isBuying, isChecking, isClicking, selectTypes, isShowPhone, modalContact, contacts,
-      isShowProvider, provider, selectProv
+      isShowProvider, provider, selectProv, isSwitchValue
     
     } = this.state;
     let { 
       contentStyle, contentBg, contentRender, cardStyles, footerStyles, SubmitStyle, 
       SubmitBlockStyle, textStyle, formStyles, labelAStyles, labelInStyles, iconAStyles, 
-      iconInStyles ,textItemPrefix, textItemPrice, ItemPrice, textItemA,textItemIn
+      iconInStyles ,textItemPrefix, textItemPrice, ItemPrice, textItemA,textItemIn,
+      switchStyles, textSwitchStyles
     } = styles;
     return (
       <Container>
@@ -348,16 +390,28 @@ _onRetireveNumberPhoneContact = async () => {
                   <Text style={ItemPrice}>Rp. {formatPrice(this.state.denomPrice)}</Text>
                 </Col>
               </Grid>
-              <Item floatingLabel>
+
+              { isSwitchValue ? <Item floatingLabel>
                 <Icon name="ios-cash" style={counter ? iconAStyles:iconInStyles}/>
-                  <Label style={counter ? labelAStyles : labelInStyles}>No Transaction</Label>
+                  <Label style={counter ? labelAStyles : labelInStyles}>Nomor Transaksi</Label>
                   <Input 
                     onChangeText={counter => this.setState({counter})}
                     value={counter.toString()}
                     keyboardType='phone-pad'
                   />
-              </Item>
-            </View>: null
+                  <Icon name="ios-close-circle-outline" onPress={() => this.setState({ counter: 1 })} />
+              </Item>: null
+              }
+            <Item style={{marginTop: 8}}>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              onValueChange={value => this._onLoopingTwoTransaction(value)}
+              style={switchStyles}
+              value={isSwitchValue} 
+            />
+              <Label style={textSwitchStyles}>Switch untuk transaksi ke 2 | 3 | 4</Label>
+            </Item>
+            </View> : null
           }
           </Form>
         </Card>
@@ -398,9 +452,13 @@ _onRetireveNumberPhoneContact = async () => {
       onRefresh={this._onReloadScreenAndData}
         data={this.state.isContacts && this.state.isContacts.length > 0 ? this.state.isContacts : this.state.contacts}
         renderItem={({item}) => 
-        <ContactItem item={item} onPress={() => 
-          this.setState({ 
-            handphone: item.number, modalContact:false, isShowProvider: true
+        <ContactItem 
+          item={item} 
+          onPress={() => 
+            this.setState({ 
+              handphone: item.number, 
+              modalContact:false, 
+              isShowProvider: true
           })}
           />
         }

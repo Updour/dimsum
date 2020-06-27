@@ -31,7 +31,9 @@ export default class ProcessingData extends Component {
       let val = await AsyncStorage.getItem('@keyData')
       let parsed = JSON.parse(val)
       this.setState({ id : parsed.agenid })
-      	setTimeout(() => { this._onRetrieveDataProcessed() }, timer())
+      	setTimeout(() => { 
+          this._onRetrieveDataProcessed() 
+        }, timer())
     }catch(err) {
       throw err;
     }
@@ -71,7 +73,7 @@ export default class ProcessingData extends Component {
   render() {
     return (
     	<Container>
-      <Header style={styles.headerStyles}/>
+      <Header style={styles.headerStyles} />
       <Statusbar />
     	<ReloadScreen 
     		refreshing={this.state.refreshing}

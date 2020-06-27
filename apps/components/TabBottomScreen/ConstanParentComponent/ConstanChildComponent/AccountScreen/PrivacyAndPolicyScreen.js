@@ -26,7 +26,7 @@ class PrivacyAndPolicyScreen extends Component {
 			<Statusbar />
 			</Header>
 			<WebView
-			source={{uri: 'https://xmetrik.flycricket.io/privacy.html'}}
+			source={{uri: 'https://x-metrik.flycricket.io/privacy.html'}}
 			style={{}}
 			/>
 			</Container>

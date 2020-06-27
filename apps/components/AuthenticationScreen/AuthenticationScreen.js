@@ -7,8 +7,7 @@ import axios from 'axios'
 import { StackActions, NavigationActions } from 'react-navigation';
 import { ScrollView, TouchableOpacity } from 'react-native'
 import { 
-  Container, Content, Form, Item, Input, Label,
-  Icon, Text, Switch, Card,
+  Container, Content, Form, Item, Input, Label, Icon, Text, Switch, Card,
 } from 'native-base';
 import { 
   netAuth, AuthStyles, styles, Submit, CantStorage, SaveLocal, SaveStorage, LogFailed, LogSuccess, Empty, SkypeIndicator
@@ -175,7 +174,7 @@ export default class AuthenticationScreen extends Component {
                 style={pin ? iconInaFocus : iconFocus} 
                 onPress={this._onVisibleIconPinSwicthes}
                 />
-              <Label style={pin ? labelInaFocus : labelFocus }>Pin</Label>
+              <Label style={pin ? labelInaFocus : labelFocus }>Pin Transaksi</Label>
               <Input 
                 secureTextEntry= {isPinSwitches}
                 onChangeText={pin => this.setState({pin})}
@@ -183,10 +182,10 @@ export default class AuthenticationScreen extends Component {
               />
             </Item>
             <Item stackedLabel last style={itemStyles}>
-            <Icon name={isPasswordSwitches ? 'ios-eye-off' : 'ios-eye'} 
+            <Icon name={isPasswordSwitches ? 'ios-eye-off' : 'ios-eye'}
                 style={password ? iconInaFocus : iconFocus} 
                 onPress={this._onVisibleIconPasswordSwicthes}/>
-              <Label style={password ? labelInaFocus : labelFocus }>Password</Label>
+              <Label style={password ? labelInaFocus : labelFocus }>Password Transaksi</Label>
               <Input 
                 style={inputStyles}
                 secureTextEntry= {isPasswordSwitches}

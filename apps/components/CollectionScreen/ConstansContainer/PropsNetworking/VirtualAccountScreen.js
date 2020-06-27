@@ -20,3 +20,10 @@ export const vNetEtoll = () => (
 export const vNetCinema = () => (
   uri = urlXmetrik() + 'vcinema'
 )
+export const vNetShopee = () => (
+  uri = urlXmetrik() + 'vshoppe'
+)
+
+export const vNetLinkAja = () => (
+  uri = urlXmetrik() + 'vlinkaja'
+)

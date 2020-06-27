@@ -7,7 +7,7 @@ export * from './ConstansStyles/GlobalStyles'
 export * from './ConstansStyles/DashboardStyles'
 export * from './ConstansStyles/AuthStyles'
 export * from './ConstansStyles/ListStyles'
-
+export * from './ConstansStyles/PrintStyles'
 
 // networking
 export * from './ConstansContainer/PropsNetworking/AuthenticationScreen'

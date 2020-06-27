@@ -136,7 +136,7 @@ export default class PlnPpobScreen extends Component {
         refreshing={refreshing}
         onRefresh={this._onReloadScreenAndData}
        >
-      <PlnPascaHeader {...this.props} onPress={this._onReloadScreenAndData}/>
+      {/*<PlnPascaHeader {...this.props} onPress={this._onReloadScreenAndData}/>*/}
 	      <Content>
 		      <Card style={cardStyles}>
 			      <Form style={formStyles}>

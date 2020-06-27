@@ -8,8 +8,7 @@ import axios from 'axios'
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import { Col, Grid } from "react-native-easy-grid";
 import { 
-	Container, Content, Text, Card, Form, Item, Label, Picker, 
-	Icon, Input, Footer
+	Container, Content, Text, Card, Form, Item, Label, Picker, Switch, Icon, Input, Footer
 } from 'native-base'
 import { 
 	vNetGames, styles, netInbox, timer, types, ModalPopUp,
@@ -23,16 +22,18 @@ import GameHeader from './PropsHeaderComponent/GameHeader'
 export default class GameVoucherScreen extends Component {
 	_isMounted = false;
 	state= {
-		ArrCode: [],
+		isCode: [],
 		input: '',
 		code: '',
 		price: '',
 		counter: 1,
+    search: '',
 		modalVisible: false,
 		isShowButton: false,
 		isBuying: false,
 		isClicking: false,
 		isChecking: false,
+    isSwitchValue: false,
 		types: types()
 	}
 	componentDidMount() {
@@ -74,11 +75,11 @@ export default class GameVoucherScreen extends Component {
   // code voucher
   _onRetreiveValueDataCodeVoucher = async () => {
   	try { 
-  		if (this.state.input ==='') { return Empty() }
+  		if (this.state.input ==='') return Empty()
   			this.setState({ modalVisible: true })
   		let results = await axios.get(vNetGames())
   		let data = results.data.data
-  		this.setState({ ArrCode: data })
+  		this.setState({ isCode: data })
   	}catch(err) {
   		throw err;
   	}
@@ -86,9 +87,24 @@ export default class GameVoucherScreen extends Component {
   // buying voucher 
   _onBuyingDataCodeVoucher = async () => {
   	try {
-  		let { code, input, isBuying, id, hp, pin, types, counter } = this.state;
-  		if (code === '' || input === '') { return Empty() }
+  		let { code, input, isBuying, id, hp, pin, types, counter, isSwitchValue } = this.state;
+  		if (code === '' || input === '') return Empty()
   			this.setState({ isBuying: true, isClicking: true })
+      if (isSwitchValue === false) {
+        let posts = {
+        in_hpnumber: hp,
+        in_message: code +'.'+ input +'.'+ pin,
+        agenid: id,
+        tipe: types
+      }
+        let results = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          // this._onNavigateToProcessTransaction()
+          this.setState({ isBuying: false, isChecking: true })
+        }, timers());
+        return
+      }
+
   		let posts = {
   			in_hpnumber: hp,
   			in_message: code +'.'+ input +'.'+ pin +'.'+ counter,
@@ -104,28 +120,55 @@ export default class GameVoucherScreen extends Component {
   		throw err;
   	}
   }
-  // _onNavigateToProcessTransaction = value => {
-  // 	this.setState({ isChecking: true }, 
-  // 		() => this.props.navigation.navigate('process'))
-  // } 
+
+      // switch to save data
+  _onLoopingTwoTransaction = value => {
+    this.setState({ isSwitchValue: value })
+    if(value == true) {
+      const { code, input } = this.state;
+      if (code === '' || input === '') {
+        Empty()  
+        this.setState({ isSwitchValue: false })
+      } else { 
+        this.state.counter++
+        this.setState({ isSwitchValue: true })
+      }
+    } else {
+      this.setState({ isSwitchValue: false, counter: 1 })
+    }
+  }
+
+  //search name game
+  _onRetrieveValueSearching = text => {
+    const newData = this.state.isCode.filter(item => {
+      console.log(item)
+      const itemData = item.ket ? item.ket.toUpperCase() : ''.toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    this.setState({ isCodes: newData, search: text });
+  }
+
   //
   _onReloadScreenAndData = () => {
     this.setState({ 
       refreshing: true, 
       input: '', 
-      isClicking: ''
+      isClicking: '',
+      isSwitchValue: false,
+       counter: 1,
     }, ()=> this._onRetrieveValueDataStorage())
   }
   render() {
   	let { 
-  		input, counter, code, ArrCode, modalVisible, isShowButton, isBuying,
-  		isClicking, isChecking
+  		input, counter, code, isCode, modalVisible, isShowButton, isBuying,
+  		isClicking, isChecking, isSwitchValue
   	} = this.state;
 
   	let { 
   		contentStyle, cardStyles, formStyles, iconAStyles, iconInStyles, labelAStyles, 
   		labelInStyles, footerStyles, SubmitStyle, textStyle, textItemPrice, ItemPrice, 
-  		SubmitBlockStyle
+  		SubmitBlockStyle, textSwitchStyles
   	} = styles;
     return (
       <Container>
@@ -170,16 +213,27 @@ export default class GameVoucherScreen extends Component {
                   <Text style={ItemPrice}>Rp. {formatPrice(this.state.price)}</Text>
                 </Col>
               </Grid>
-              <Item floatingLabel>
-              <Icon name="ios-cash" style={counter ? iconAStyles : iconInStyles}/>
-              <Label style={counter ? labelAStyles : labelInStyles}>No Transaksi</Label>
-	              <Input 
-		              onChangeText={counter => this.setState({counter})}
-									value={counter.toString()}
-									keyboardType='phone-pad'
-								/>
-						</Item>
-						</View>: null}
+              { isSwitchValue ? <Item floatingLabel>
+                <Icon name="ios-cash" style={counter ? iconAStyles:iconInStyles}/>
+                  <Label style={counter ? labelAStyles : labelInStyles}>Nomor Transaksi</Label>
+                  <Input 
+                    onChangeText={counter => this.setState({counter})}
+                    value={counter.toString()}
+                    keyboardType='phone-pad'
+                  />
+                  <Icon name="ios-close-circle-outline" onPress={() => this.setState({ counter: 1 })} />
+              </Item>: null
+              }
+            <Item style={{marginTop: 8}}>
+            <Switch
+              onValueChange={value => this._onLoopingTwoTransaction(value)}
+             
+              value={isSwitchValue} 
+            />
+              <Label style={textSwitchStyles}>Switch untuk transaksi ke 2 | 3 | 4</Label>
+            </Item>
+            </View> : null
+          }
 						</Form>
           </Card>
           {isClicking ? 
@@ -197,15 +251,34 @@ export default class GameVoucherScreen extends Component {
         >
         	<Content>
         	<FlatList 
-	        	data={ArrCode}
+	        	// data={isCode}
+            data={this.state.isCodes && this.state.isCodes.length > 0 ? this.state.isCodes : this.state.isCode}
 	        	keyExtractor={(i, j) => j.toString()}
 	        	renderItem={({item}) => 
 	        	<VoucherResponse item={item}
-	        	onPress={()=> this.setState({ code: item.vtype, price: item.harga, modalVisible: false })}
+	        	onPress={()=> 
+              this.setState({ 
+                code: item.vtype, 
+                price: item.harga, 
+                modalVisible: false 
+              })
+            }
 	        	/>
 	        	}
         	/>
         	</Content>
+          <View style={footerStyles}>
+        <Item rounded>
+          <Icon name="ios-search"/>
+            <Input placeholder="Cari berdasarkan nama/keterangan" 
+              onChangeText={search => this._onRetrieveValueSearching(search)}
+              value={this.state.search}
+              autoFocus={true}
+            />
+          <Icon name="ios-close" style={{ fontSize: 30, marginRight: 13 }}
+          onPress={() => this.setState({search: ''})}/>
+        </Item>
+      </View>
         </ModalPopUp>
       	</Content>
         </ReloadScreen>
@@ -213,13 +286,13 @@ export default class GameVoucherScreen extends Component {
         	<Footer style={footerStyles}>
         	{isBuying ? <PleaseWait />:
         		<TouchableOpacity onPress={this._onBuyingDataCodeVoucher} style={SubmitStyle}>
-        		<Text style={textStyle}>BAYAR</Text>
+        		<Text style={textStyle}>BELI</Text>
         		</TouchableOpacity>
         	}
         	</Footer> : 
         	<Footer style={footerStyles}>
         	<TouchableOpacity style={SubmitBlockStyle}>
-        	<Text style={textStyle}>BAYAR</Text>
+        	<Text style={textStyle}>BELI</Text>
         	</TouchableOpacity>
         	</Footer>
     		}

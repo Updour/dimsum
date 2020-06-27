@@ -56,6 +56,12 @@ export const ApiMenuGlobal = [
     nav: 'pln',
     img: require('../../../../../assets/images/ppob/pln_pasca.png'),
   },
+  
+  // {
+  //   name: 'Pdam', //in ppob menu === bolt wayae
+  //   nav: 'pdam',
+  //   img: require('../../../../../assets/images/ppob/pdam.png'),
+  // },
   {
     name: 'PDAM',
     text: 'Untuk Cek / Pembayaran PDAM',

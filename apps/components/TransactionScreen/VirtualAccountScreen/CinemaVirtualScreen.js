@@ -4,12 +4,10 @@ import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
 
-
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import { Col, Grid } from "react-native-easy-grid";
 import { 
-  Container, Content, Text, Card, Form, Item, Label, Picker, 
-  Icon, Input, Footer
+  Container, Content, Text, Card, Form, Item, Label, Picker, Switch, Icon, Input, Footer
 } from 'native-base'
 import { 
   vNetCinema, styles, netInbox, timer, types, ModalPopUp, MaterialIndicator,
@@ -35,6 +33,7 @@ export default class CinemaVirtualScreen extends Component {
     isBuying: false,
     isClicking: false,
     isChecking: false,
+    isSwitchValue: false,
     types: types()
   }
   componentDidMount() {
@@ -90,46 +89,72 @@ export default class CinemaVirtualScreen extends Component {
   // buying voucher 
   _onBuyingDataCodeVoucher = async () => {
     try {
-      let { code, input, isBuying, id, hp, pin, types, counter } = this.state;
+      let { code, input, isBuying, id, hp, pin, types, counter, isSwitchValue } = this.state;
       if (code === '' || input === '') { return Empty() }
         this.setState({ isBuying: true, isClicking: true })
-      let posts = {
-        in_hpnumber: hp,
-        in_message: code +'.'+ input +'.'+ pin +'.'+ counter,
-        agenid: id,
-        tipe: types
+      if (isSwitchValue === false) {
+        let posts = {
+          in_hpnumber: hp,
+          in_message: code +'.'+ input +'.'+ pin,
+          agenid: id,
+          tipe: types
+        }
+        let results = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          this.setState({ isBuying: false, isChecking: true })
+        }, timers());
+        return
       }
-      let results = await axios.post(netInbox(), posts)
-      setTimeout(() => {
-        // this._onNavigateToProcessTransaction()
-        this.setState({ isBuying: false, isChecking: true })
-      }, timers());
+        let posts = {
+          in_hpnumber: hp,
+          in_message: code +'.'+ input +'.'+ pin +'.'+ counter,
+          agenid: id,
+          tipe: types
+        }
+        let results = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          this.setState({ isBuying: false, isChecking: true })
+        }, timers());
+
     }catch(err) {
       throw err;
     }
   }
-  // _onNavigateToProcessTransaction = value => {
-  //  this.setState({ isChecking: true }, 
-  //    () => this.props.navigation.navigate('process'))
-  // } 
+     // switch to save data
+  _onLoopingTwoTransaction = value => {
+    this.setState({ isSwitchValue: value })
+    if(value == true) {
+      const { code, input } = this.state;
+      if (code === '' || input === '') {
+        Empty()  
+        this.setState({ isSwitchValue: false })
+      } else { 
+        this.state.counter++
+        this.setState({ isSwitchValue: true })
+      }
+    } else {
+      this.setState({ isSwitchValue: false, counter: 1 })
+    }
+  }
   //
   _onReloadScreenAndData = () => {
     this.setState({ 
       refreshing: true, 
       input: '', 
-      isClicking: ''
+      isClicking: '',
+      counter: 1
     }, ()=> this._onRetrieveValueDataStorage())
   }
   render() {
     let { 
       input, counter, code, ArrCode, modalVisible, isShowButton, isBuying,
-      isClicking, isChecking
+      isClicking, isChecking, isSwitchValue
     } = this.state;
 
     let { 
       contentStyle, cardStyles, formStyles, iconAStyles, iconInStyles, labelAStyles, 
       labelInStyles, footerStyles, SubmitStyle, textStyle, textItemPrice, ItemPrice, 
-      SubmitBlockStyle
+      SubmitBlockStyle, textSwitchStyles
     } = styles;
     return (
       <Container>
@@ -168,22 +193,32 @@ export default class CinemaVirtualScreen extends Component {
               </Item>
               <Grid>
                 <Col>
-                  <Text style={textItemPrice}>Price</Text>
+                  <Text style={textItemPrice}>Harga</Text>
                 </Col>
                 <Col> 
                   <Text style={ItemPrice}>Rp. {formatPrice(this.state.price)}</Text>
                 </Col>
               </Grid>
-              <Item floatingLabel>
-              <Icon name="ios-cash" style={counter ? iconAStyles : iconInStyles}/>
-              <Label style={counter ? labelAStyles : labelInStyles}>No Transaksi</Label>
-                <Input 
-                  onChangeText={counter => this.setState({counter})}
-                  value={counter.toString()}
-                  keyboardType='phone-pad'
-                />
+               { isSwitchValue ? <Item floatingLabel>
+                <Icon name="ios-cash" style={counter ? iconAStyles:iconInStyles}/>
+                  <Label style={counter ? labelAStyles : labelInStyles}>Nomor Transaksi</Label>
+                  <Input 
+                    onChangeText={counter => this.setState({counter})}
+                    value={counter.toString()}
+                    keyboardType='phone-pad'
+                  />
+                  <Icon name="ios-close-circle-outline" onPress={() => this.setState({ counter: 1 })} />
+              </Item>: null
+              }
+            <Item style={{marginTop: 8}}>
+            <Switch
+              onValueChange={value => this._onLoopingTwoTransaction(value)}
+              value={isSwitchValue} 
+            />
+              <Label style={textSwitchStyles}>Switch untuk transaksi ke 2 | 3 | 4</Label>
             </Item>
-            </View>: null}
+            </View> : null
+          }
             </Form>
           </Card>
           {isClicking ? 
@@ -218,13 +253,13 @@ export default class CinemaVirtualScreen extends Component {
           <Footer style={footerStyles}>
           {isBuying ? <PleaseWait />:
             <TouchableOpacity onPress={this._onBuyingDataCodeVoucher} style={SubmitStyle}>
-            <Text style={textStyle}>BUY</Text>
+            <Text style={textStyle}>BELI</Text>
             </TouchableOpacity>
           }
           </Footer> : 
           <Footer style={footerStyles}>
           <TouchableOpacity style={SubmitBlockStyle}>
-          <Text style={textStyle}>BUY</Text>
+          <Text style={textStyle}>BELI</Text>
           </TouchableOpacity>
           </Footer>
         }

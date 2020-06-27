@@ -14,8 +14,7 @@ import ReportAllDay from './ConstanChildComponent/ReportScreen/ReportAllDay'
 
 
 export default class ReportScreen extends Component {
-  state = {
-  }  
+
   render() {
   	let { goBack } = this.props.navigation
     return (

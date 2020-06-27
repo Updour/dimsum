@@ -28,6 +28,7 @@ export const Empty = () => {
 export const Prefix = () => {
   ToastAndroid.show('Provider not aviable', ToastAndroid.SHORT);
 }
+
 export const Denied = () => {
   ToastAndroid.show('Access Denied', ToastAndroid.SHORT);
 }
@@ -56,6 +57,17 @@ ToastAndroid.show(' contoh: * 08234567890', ToastAndroid.LONG);
 }
 
 export const setNotifSet= () => {
-ToastAndroid.show(' Minimal Setting Bonus Rp. 50 Dan Maximal Rp. 400', ToastAndroid.SHORT);	
+ToastAndroid.show(' Minimal Setting Bonus Rp. 50 Dan Maximal Rp. 500', ToastAndroid.SHORT);	
+}
+// data not found
+
+export const setNotifNot= () => {
+ToastAndroid.show('Data not found', ToastAndroid.SHORT);	
 }
 
+export const setNotifRemove= () => {
+ToastAndroid.show('Data remove Successfully', ToastAndroid.SHORT);	
+}
+export const NotifyResponse= (val) => {
+ToastAndroid.show(val, ToastAndroid.SHORT);	
+}

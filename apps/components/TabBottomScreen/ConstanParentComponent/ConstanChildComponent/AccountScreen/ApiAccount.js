@@ -1,4 +1,10 @@
 export const ApiAccount = [
+	// {
+	// 	name: 'Verifikasi 2 Langkah',
+	// 	nav: 'security',
+	// 	iconL: 'ios-settings',
+	// 	iconR: 'ios-arrow-forward'
+	// },
 	{
 		name: 'Riwayat Transaksi',
 		nav: 'history',

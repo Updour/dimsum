@@ -5,14 +5,14 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios'
 import Contacts from 'react-native-contacts';
 
-import { PermissionsAndroid, View, FlatList, TouchableOpacity } from 'react-native';
+import { PermissionsAndroid, View, FlatList, TouchableOpacity, Switch } from 'react-native';
 import { 
   Container, Content, Text, Card, Form, Item, Label, Picker, Icon, Input, Footer
 } from 'native-base'
 import { Col, Grid } from "react-native-easy-grid";
 import { 
-  netUsers, eNetPrefix, eNetDenom,reloaded, netInbox, timer, types, Empty, styles,
-  ModalPopUp, PrefixNull, ReloadScreen, PleaseWait, Processed, Denied,
+  netUsers, eNetAllPrefix, eNetDenom,reloaded, netInbox, timer, types, Empty, styles, CantStorage,
+  ModalPopUp, PrefixNull, ReloadScreen, PleaseWait, Processed, Denied, switchStyles, textSwitchStyles,
   formatPrice, timers, CheckedData, ReadingContact, Prefix, ModalContact, ContactItem
 } from '../../CollectionScreen'
 
@@ -32,6 +32,7 @@ export default class EletricRegularScreen extends Component {
     isContacts: [],
     contacts: [],
     contact: [],
+    // prov: [],
     modalVisible: false,
     modalContact: false,
     refreshing: false,
@@ -39,15 +40,15 @@ export default class EletricRegularScreen extends Component {
     isBuying: false,
     isChecking: false,
     isClicking: false,
-    types: types()
+    isSwitchValue: false,
+    isOprByu: false,
+    types: types(),
   }
 
   componentDidMount() {
     this._isMounted = true;
     this._onRetrieveValueDataStorage()
-    this._interval = setInterval(() => {
-      this._onRetrieveValueDataPrefix()
-    }, reloaded());
+    this._onRetrieveValueDataPrefix()
   }
 
   componentWillUnmount() {
@@ -71,12 +72,24 @@ export default class EletricRegularScreen extends Component {
   // provider
   _onRetrieveValueDataPrefix = async () => {
     try {
-      let uri = eNetPrefix() + this.state.handphone.substring(0, 4) 
-      // console.log('a',uri)
-      // let results = await axios.get(eNetPrefix() + this.state.handphone.substring(0, 4))
-      let results = await axios.get(uri)
-      let data = results.data.data[0].opr_pref
-      if (this._isMounted) { this.setState({ prefix: data, isShowNominal: true })}
+      let { handphone } = this.state;
+      let response = await axios.get(eNetAllPrefix())
+      let prov = response.data.data
+        if(handphone.length > 3){
+          for (let i = 0; i < prov.length; i++) {
+            prov.filter(item => {
+              for(let j = 0; j < item.prefix.length; j++ ) {
+                if (item.prefix.toLowerCase().indexOf(handphone.substr(0, 4)) !== -1) {
+                  this.setState({
+                    prefix: item.opr_pref, 
+                    isShowNominal: true 
+                  })
+                  return false
+                }
+              }
+            })
+          }
+        }
     }catch(err) {
       throw err;
     }
@@ -86,8 +99,7 @@ export default class EletricRegularScreen extends Component {
   // check e number
   _onCheckNumberRenderPrefix = value => {
     this.setState({ handphone : value }, () => {
-      console.log('a', this.state.handphone)
-      if (this.state.handphone.length === 4) {
+      if (this.state.handphone) {
         this._onRetrieveValueDataPrefix()
       }
       if (this.state.handphone.length === 10) {
@@ -133,7 +145,7 @@ export default class EletricRegularScreen extends Component {
                   return 0
   }
 
-  // select denome 
+  // select denome  || filter prefix
   _onRetrieveValueDataDenom = async () => {
     try {
       let { id, handphone, prefix } = this.state;
@@ -142,12 +154,26 @@ export default class EletricRegularScreen extends Component {
 
       let result = await axios.get(eNetDenom() + id +'/'+ prefix)
       let data = result.data.data
-      let values = data.map(i => ({
+
+      if (prefix === 'BYU') {
+        let valueByu = data.map(i => ({
+          typed: i.vtype,
+          denomsasi: i.denomsasi,
+          harga: i.harga + this._onMergeValueDataPriceOperator(i.opr, this.state.users),
+          ket: i.ket
+        }))
+        this.setState({ ArrDenom: valueByu, refreshing: false, isOprByu: true })
+        // console.log(valueByu)
+        return
+      }
+
+      let valueNotByu = data.map(i => ({
         denomsasi: i.denomsasi,
         harga: i.harga + this._onMergeValueDataPriceOperator(i.opr, this.state.users),
         ket: i.ket
       }))
-      this.setState({ ArrDenom: values, refreshing: false })
+      // console.log('data', values)
+      this.setState({ ArrDenom: valueNotByu, refreshing: false })
     }catch(err) {
       throw err;
     }
@@ -156,23 +182,60 @@ export default class EletricRegularScreen extends Component {
 // buy eletric
   _onBuyingEletricRegular = async () => {
     try {
-      let { handphone, denom, id, hp, pin, types, counter } = this.state;
-      if (handphone ==='' || denom ==='' ) { return Empty() }
+      let { handphone, denom, id, hp, pin, isOprByu, typed, types, counter, isSwitchValue } = this.state;
+      console.log('opr', isOprByu)
+      if (handphone ==='' || denom ==='' ) return Empty() 
         this.setState({ isBuying: true, isClicking: true })
-      let posts = {
-        in_hpnumber: hp,
-        in_message: denom +'.'+ handphone +'.'+ pin +'.'+ counter,
-        agenid: id,
-        tipe: types
+
+      // if code byu
+      if (isOprByu === true) {
+        let posts = {
+          in_hpnumber: hp,
+          in_message: typed +'.'+ handphone +'.'+ pin +'.'+ counter,
+          agenid: id,
+          tipe: types
+        }
+        let response = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          this.setState({ isBuying: false, isChecking: true, })
+        }, timers())
+        return
       }
-      let response = await axios.post(netInbox(), posts)
-      setTimeout(() => {
-        this.setState({ isBuying: false, isChecking: true, })
-      }, timers()); 
+
+      // if trx 2
+      if (isSwitchValue === false) {
+         let posts = {
+          in_hpnumber: hp,
+          in_message: denom +'.'+ handphone +'.'+ pin,
+          agenid: id,
+          tipe: types
+        }
+        // console.log('false', posts)
+        let response = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          this.setState({ isBuying: false, isChecking: true, })
+        }, timers())
+        return;
+      }
+        let posts = {
+          in_hpnumber: hp,
+          in_message: denom +'.'+ handphone +'.'+ pin +'.'+ counter,
+          agenid: id,
+          tipe: types
+        }
+        // console.log('posts', posts)
+        let response = await axios.post(netInbox(), posts)
+        setTimeout(() => {
+          this.setState({ isBuying: false, isChecking: true, })
+        }, timers())
+     
+     
     } catch(err){
       throw err;
     }
   }
+  // _onRetrieveValueDataPrefix
+// _onCheckNumberRenderPrefix
   // 
   _onRetireveNumberPhoneContact = async () => {
     await ReadingContact().then(() => {
@@ -194,14 +257,13 @@ export default class EletricRegularScreen extends Component {
             modalContact: true, 
             isShowNominal: true 
           })
-            setTimeout(() => {
-              this._onRetrieveValueDataPrefix()
-            }, 1000);
+           
         }
       })
     })
   }
  
+ // seacrh data contact permission to android
 _onRetrieveContactSearch = text => {
     const newData = this.state.contacts.filter(item => {
       const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
@@ -210,26 +272,46 @@ _onRetrieveContactSearch = text => {
     });
     this.setState({ isContacts: newData, search: text });
   }
+
+     // switch to save data
+  _onLoopingTwoTransaction = value => {
+    this.setState({ isSwitchValue: value })
+    if(value == true) {
+      const { handphone, denom } = this.state;
+      if (handphone === '' || denom === '') {
+        Empty()  
+        this.setState({ isSwitchValue: false })
+      } else {
+        this.state.counter++
+        this.setState({ isSwitchValue: true })
+      }
+    } else {
+      this.setState({ isSwitchValue: false, counter: 1 })
+    }
+  }
   // 
   _onReloadScreenAndData = () => {
     this.setState({ 
       refreshing: true, 
+      isSwitchValue: false,
+      isShowNominal: false,
       isChecking: '', 
       isClicking: '', 
-      isShowNominal: '',
       handphone: '',
       prefix: '',
+      denom: '',
+      counter: 1
     }, ()=> this._onRetreiveValueDataUser())
   }
   render() {
     let { 
       handphone, denom, denomPrice, counter, ArrDenom, modalVisible, refreshing, isShowNominal,
-      isBuying, isChecking, isClicking, modalContact, contacts, contact
+      isBuying, isChecking, isClicking, modalContact, contacts, contact, isSwitchValue
     } = this.state;
     let { 
       contentStyle, contentBg, contentRender, cardStyles, footerStyles, SubmitStyle, 
       SubmitBlockStyle, textStyle, formStyles, labelAStyles, labelInStyles, iconAStyles, 
-      iconInStyles ,textItemPrefix, textItemPrice, ItemPrice
+      iconInStyles ,textItemPrefix, textItemPrice, ItemPrice, textSwitchStyles
     } = styles;
     return (
       <Container>
@@ -274,16 +356,29 @@ _onRetrieveContactSearch = text => {
                 <Col>
                   <Text style={ItemPrice}>Rp. {formatPrice(this.state.denomPrice)}</Text>
                 </Col>
-              </Grid>
-              <Item floatingLabel>
+              </Grid> 
+ 
+            {/*chnage status transation to 2 when clicked*/}
+              { isSwitchValue ? <Item floatingLabel>
                 <Icon name="ios-cash" style={counter ? iconAStyles:iconInStyles}/>
-                  <Label style={counter ? labelAStyles : labelInStyles}>No Transaction</Label>
+                  <Label style={counter ? labelAStyles : labelInStyles}>Nomor Transaksi</Label>
                   <Input 
                     onChangeText={counter => this.setState({counter})}
                     value={counter.toString()}
                     keyboardType='phone-pad'
                   />
-              </Item>
+                  <Icon name="ios-close-circle-outline" onPress={() => this.setState({ counter: 1 })} />
+              </Item>: null
+              }
+            <Item style={{marginTop: 8}}>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              onValueChange={value => this._onLoopingTwoTransaction(value)}
+              style={switchStyles}
+              value={isSwitchValue} 
+            />
+              <Label style={textSwitchStyles}>Switch untuk transaksi ke 2 | 3 | 4</Label>
+            </Item>
             </View> : null
           }
           </Form>
@@ -309,7 +404,13 @@ _onRetrieveContactSearch = text => {
           keyExtractor={(i, j) => j.toString()}
           renderItem={({item}) =>  
             <ResponseDenom item={item} onPress={() => 
-              this.setState({ denom : item.denomsasi, denomPrice: item.harga, modalVisible:false })}
+              this.setState({ 
+                denom : item.denomsasi, 
+                denomPrice: item.harga, 
+                typed: item.typed,
+                modalVisible:false 
+              })
+            }
               />
             }
       />
@@ -326,9 +427,9 @@ _onRetrieveContactSearch = text => {
         renderItem={({item}) => 
         <ContactItem item={item} onPress={() => 
           this.setState({ 
-            handphone: item.number.replace('+62', '0').replace('-', '').replace('-', ''), 
+            handphone: item.number.replace('+62', '0').replace(' ', '').replace('-', '').replace('-', ''), 
             modalContact:false
-          })}
+          }, () => this._onRetrieveValueDataPrefix())}
           />
         }
       >

@@ -8,12 +8,11 @@ import axios from 'axios'
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import { Col, Grid } from "react-native-easy-grid";
 import { 
-	Container, Content, Text, Card, Form, Item, Label, Picker, 
-	Icon, Input, Footer
+	Container, Content, Text, Card, Form, Item, Label, Picker, Switch, Icon, Input, Footer
 } from 'native-base'
 import { 
 	vNetTokenPln, styles, netUsers, netInbox, timer, types, ModalPopUp, setHp, setNotifHp,
-	Empty, formatPrice, ReloadScreen, PleaseWait, CheckedData, Processed, timers
+	Empty, formatPrice, ReloadScreen, PleaseWait, CheckedData, Processed, timers,
 } from '../../CollectionScreen'
 
 import PlnTokenHeader from './PropsHeaderComponent/PlnTokenHeader'
@@ -34,6 +33,7 @@ export default class TockenPlnVoucherScreen extends Component {
 		isBuying: false,
 		isClicking: false,
 		isChecking: false,
+    isSwitchValue: false,
 		types: types()
 	}
 	componentDidMount() {
@@ -127,9 +127,22 @@ export default class TockenPlnVoucherScreen extends Component {
   // buying voucher
   _onBuyingDataCodeVoucher = async () => {
   	try {
-  		let { phone, code, input, isBuying, id, hp, pin, types, counter } = this.state;
+  		let { phone, code, input, isBuying, id, hp, pin, types, counter, isSwitchValue } = this.state;
   		if (code === '' || input === '') { return Empty() }
   			this.setState({ isBuying: true, isClicking: true })
+       if (isSwitchValue === false) {
+        let posts = {
+          in_hpnumber: hp,
+          in_message: code +'.'+ input +'.'+ pin,
+          agenid: id,
+          tipe: types
+        }
+        let results = await axios.post(netInbox(), posts)
+          setTimeout(() => {
+            this.setState({ isBuying: false, isChecking: true })
+          }, timers())
+          return
+      }
   		let posts = {
   			in_hpnumber: hp,
   			in_message: code +'.'+ input +'.'+ pin +''+ phone +'.'+ counter,
@@ -160,24 +173,44 @@ export default class TockenPlnVoucherScreen extends Component {
       }
     })
   }
+
+     // switch to save data
+  _onLoopingTwoTransaction = value => {
+    this.setState({ isSwitchValue: value })
+    if(value == true) {
+      const { code, input } = this.state;
+      if (code === '' || input === '') {
+        Empty()  
+        this.setState({ isSwitchValue: false })
+      } else { 
+        this.state.counter++
+        this.setState({ isSwitchValue: true })
+      }
+    } else {
+      this.setState({ isSwitchValue: false, counter: 1 })
+    }
+  }
+
   //
   _onReloadScreenAndData = () => {
     this.setState({ 
       refreshing: true, 
       input: '', 
-      isClicking: ''
+      isClicking: '',
+      code: '',
+      counter: 1,
     }, ()=> this._onRetreiveValueDataUser())
   }
   render() {
   	let { 
   		input, phone, counter, code, ArrCode, modalVisible, isShowButton, isBuying,
-  		isClicking, isChecking
+  		isClicking, isChecking, isSwitchValue
   	} = this.state;
 
   	let { 
   		contentStyle, cardStyles, formStyles, iconAStyles, iconInStyles, labelAStyles, 
   		labelInStyles, footerStyles, SubmitStyle, textStyle, textItemPrice, ItemPrice, 
-  		SubmitBlockStyle, itemStyles
+  		SubmitBlockStyle, itemStyles, textSwitchStyles
   	} = styles;
     return (
       <Container>
@@ -227,20 +260,31 @@ export default class TockenPlnVoucherScreen extends Component {
                   <Input 
                     onChangeText={phone => this._onValidationPhoneNumber(phone)}
                     value={phone}
-                    placeholder='* 081234567890'
+                    placeholder='*081234567890'
                     keyboardType='phone-pad'
                   />
               </Item>
-              <Item floatingLabel>
-              <Icon name="ios-cash" style={counter ? iconAStyles : iconInStyles}/>
-              <Label style={counter ? labelAStyles : labelInStyles}>No Transaksi</Label>
-	              <Input 
-		              onChangeText={counter => this.setState({counter})}
-									value={counter.toString()}
-									keyboardType='phone-pad'
-								/>
-						</Item>
-						</View>: null}
+              { isSwitchValue ? <Item floatingLabel>
+                <Icon name="ios-cash" style={counter ? iconAStyles:iconInStyles}/>
+                  <Label style={counter ? labelAStyles : labelInStyles}>Nomor Transaksi</Label>
+                  <Input 
+                    onChangeText={counter => this.setState({counter})}
+                    value={counter.toString()}
+                    keyboardType='phone-pad'
+                  />
+                  <Icon name="ios-close-circle-outline" onPress={() => this.setState({ counter: 1 })} />
+              </Item>: null
+              }
+            <Item style={{marginTop: 8}}>
+            <Switch
+              onValueChange={value => this._onLoopingTwoTransaction(value)}
+             
+              value={isSwitchValue} 
+            />
+              <Label style={textSwitchStyles}>Switch untuk transaksi ke 2 | 3 | 4</Label>
+            </Item>
+            </View> : null
+          }
 						</Form>
           </Card>
           {isClicking ? 
@@ -273,13 +317,13 @@ export default class TockenPlnVoucherScreen extends Component {
         	<Footer style={footerStyles}>
         	{isBuying ? <PleaseWait />:
         		<TouchableOpacity onPress={this._onBuyingDataCodeVoucher} style={SubmitStyle}>
-        		<Text style={textStyle}>BAYAR</Text>
+        		<Text style={textStyle}>BELI</Text>
         		</TouchableOpacity>
         	}
         	</Footer> : 
         	<Footer style={footerStyles}>
         	<TouchableOpacity style={SubmitBlockStyle}>
-        	<Text style={textStyle}>BAYAR</Text>
+        	<Text style={textStyle}>BELI</Text>
         	</TouchableOpacity>
         	</Footer>
     		}

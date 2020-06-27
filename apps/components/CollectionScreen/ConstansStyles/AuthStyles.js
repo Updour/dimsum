@@ -53,8 +53,6 @@ const AuthStyles = StyleSheet.create({
   color: '#333333'
 },
 labelInaFocus: {
-  // marginLeft: 17,
-  // marginTop: 2,
   fontFamily: 'roboto',
   color: 'blue'
 },
@@ -64,10 +62,80 @@ switchStyles: {
   marginLeft: 13
 },
 textSwitchStyles: { 
-  marginLeft: 62, 
   fontFamily: 'roboto', 
-  top: -20
+  color: '#2c2d2e',
+  marginLeft: 62, 
+  top: -20,
 },
+
+// for validate screen
+ gridPad: { 
+      padding: 14 
+    },
+    txtMargin: { 
+      margin: 3
+    },
+    inputRadius: { 
+      textAlign: 'center' 
+    },
+    contentStyle: {
+      // backgroundColor:'#f2f2f2',
+      alignItems:'center',
+      justifyContent:'center',
+      flex:1,
+      margin: 3,
+      paddingTop:20
+    },
+    textLabel: {
+      marginBottom: 20,
+      textAlign: 'center',
+      fontSize: 18,
+      color: '#efefef',
+      fontStyle: 'italic',
+      fontFamily: 'roboto'
+    },
+    textLabeled: {
+      textAlign: 'center',
+      color: '#efefef',
+      fontStyle: 'italic',
+      fontFamily: 'roboto',
+      marginLeft: 10, 
+      fontFamily: 'roboto', 
+      top: -20
+    },
+    textInput: {
+      padding: 5,
+      margin: 3,
+      fontSize: 25,
+      textAlign: 'center',
+      color: '#b0afab',
+      fontStyle: 'italic',
+      fontFamily: 'roboto'
+    },
+    itemStyle: {
+      marginLeft: 14,
+      marginRight: 14
+    },
+    btnStyle: {
+      backgroundColor: 'blue',
+      marginLeft: 14,
+      marginRight: 14
+    },
+    image: {
+      flex: 1,
+      resizeMode: "cover",
+      justifyContent: "center"
+    },
+    forgotBtn: {
+      marginTop: -40
+    },
+    textBtn: {
+      color: '#fff',
+      fontFamily: 'roboto',
+      fontSize: 16,
+      color: '#f2f2f2',
+      fontWeight:  '600'
+    }
 });
 
 

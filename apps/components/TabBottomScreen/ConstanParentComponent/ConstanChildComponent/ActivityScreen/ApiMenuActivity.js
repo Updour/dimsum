@@ -31,6 +31,20 @@ export const ApiMenuActivity = {
       img: require('../../../../../assets/images/activity/manual.png')
     },
     {
+      name: 'Proses Transaksi',
+      text: 'Untuk cek proses transaksi',
+      code: 'xsd',
+      nav: 'process',
+      img: require('../../../../../assets/images/activity/process.png')
+    },
+    {
+      name: 'Cetak Struk',
+      text: 'Untuk Cetak Struk PLN Pascabayar ',
+      code: 'xsd',
+      nav: 'print',
+      img: require('../../../../../assets/images/activity/printer.png')
+    },
+    {
       name: 'Deposit',
       text: 'Untuk Deposit Via Bank',
       code: 'xm',

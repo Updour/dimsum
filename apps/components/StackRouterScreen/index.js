@@ -9,11 +9,13 @@ import ListMenuGlobal from '../TabBottomScreen/ConstanParentComponent/ConstanChi
 
 // authentication screen
 import AuthenticationScreen from '../AuthenticationScreen/AuthenticationScreen'
+import StartUpScreeen from '../AuthenticationScreen/StartUpScreeen'
+import ForgotPinScreen from '../AuthenticationScreen/ForgotPinScreen'
 
 // transctionscreen eletric
 import EletricRegularScreen from '../TransactionScreen/EletricScreen/EletricRegularScreen'
 import EletricPacketScreen from '../TransactionScreen/EletricScreen/EletricPacketScreen'
-import Midtrans from '../TransactionScreen/EletricScreen/midtrans'
+// import Midtrans from '../TransactionScreen/EletricScreen/midtrans'
 // ppob screen
 import PlnPpobScreen from '../TransactionScreen/PpobScreen/PlnPpobScreen'
 import PgnPpobScreen from '../TransactionScreen/PpobScreen/PgnPpobScreen'
@@ -38,6 +40,8 @@ import GrabVirtualScreen from '../TransactionScreen/VirtualAccountScreen/GrabVir
 import EtollVirtualScreen from '../TransactionScreen/VirtualAccountScreen/EtollVirtualScreen'
 import DanaVirtualScreen from '../TransactionScreen/VirtualAccountScreen/DanaVirtualScreen'
 import CinemaVirtualScreen from '../TransactionScreen/VirtualAccountScreen/CinemaVirtualScreen'
+import ShopeeVirtualScreen from '../TransactionScreen/VirtualAccountScreen/ShopeeVirtualScreen'
+import LinkAjaVirtualScreen from '../TransactionScreen/VirtualAccountScreen/LinkAjaVirtualScreen'
 
 // activity screen
 import DataPaymentScreen from '../DataActivityScreen/ConstanDataComponent/DataPaymentScreen'
@@ -66,37 +70,33 @@ import ProcessingData from '../TransactionScreen/HistoryScreen/ProcessingData'
 import DataTransaction from '../TransactionScreen/HistoryScreen/DataTransaction'
 import HistoryTransaction from '../TransactionScreen/HistoryScreen/HistoryTransaction'
 
-// 
+// account screen tab
 import SuggestionAndCritic from '../AboutAppScreen/SuggestionAndCritic'
-// child critic saran
 import PhoneComponent from '../AboutAppScreen/PhoneComponent'
 import SmsComponent from '../AboutAppScreen/SmsComponent'
 import HelpScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/HelpScreen'
 import AboutScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/AboutScreen'
 import PrivacyAndPolicyScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/PrivacyAndPolicyScreen'
-
-// tes
-import MAP from '../testers/map'
-import Chats from '../testers/Chat'
-
-
+import SecurityScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/SecurityScreen'
+// tester
+import PrintPascaPln from '../PrintOutScreen/PrintPascaPln'
+import TabPlnScreen from '../TransactionScreen/PpobScreen/TabPlnScreen'
 
 const StackRouterScreen = createStackNavigator({
-    chat: { screen: Chats },
-    map: { screen: MAP },
-    // midtrans: { screen: Midtrans },
+    cheked: { screen: StartUpScreeen },
+    forgot: { screen: ForgotPinScreen },
     auth: { screen: AuthenticationScreen },
-    
-    // tab screen
+   
+    // // tab screen
     MainMenuBottomScreen: { screen: MainMenuBottomScreen },
-    critic: { screen: SuggestionAndCritic },
-
-    // // // // eletric screnn
+    
+    // // // // // eletric screnn
     regular: { screen: EletricRegularScreen },
     packet: { screen: EletricPacketScreen },
     
-    // // // // // // ppob screen
+    // // // // // // // ppob screen
     pln: { screen: PlnPpobScreen },
+    printPasca: { screen: TabPlnScreen },
     pgn: { screen: PgnPpobScreen },
     bpjs: { screen: BpjsPpobScreen },
     finance: { screen: FinancePpobScreen },
@@ -119,7 +119,8 @@ const StackRouterScreen = createStackNavigator({
     etoll: { screen: EtollVirtualScreen },
     dana: { screen: DanaVirtualScreen },
     cinema: { screen: CinemaVirtualScreen },
-
+    shopee: { screen:ShopeeVirtualScreen },
+    linkAja: { screen: LinkAjaVirtualScreen },
     // // // activity screen
     paymentData: { screen: DataPaymentScreen },
     mutationData: { screen: DataMutationScreen },
@@ -145,15 +146,16 @@ const StackRouterScreen = createStackNavigator({
     purchase: { screen: DataTransaction },
     history: { screen: HistoryTransaction },
     
-    // 
+    // account screeen
     help: { screen: HelpScreen },
     about: { screen: AboutScreen },
-
+    critic: { screen: SuggestionAndCritic },
     privacy: { screen: PrivacyAndPolicyScreen },
     phone: { screen: PhoneComponent },
     sms: { screen: SmsComponent },
+    security: { screen: SecurityScreen },
 
-
+    print: { screen: PrintPascaPln },
     allMenu: { screen: ListMenuGlobal }
   }, 
   {

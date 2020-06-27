@@ -64,3 +64,8 @@ export const dpNetTselDatas = () => (
 export const dpNetTselPhone = () => (
   uri = 'http://xmetrik.biz:9700/telpon'
 )
+
+/* print out screen to bluetooth*/
+export const pNetPrintPasca = () => (
+  uri = urlXmetrik() + 'pay/'
+)
