@@ -43,10 +43,10 @@ export const ApiPrivacy = [
 		nav: 'about',
 		iconL: 'ios-information-circle',
 		iconR: 'ios-arrow-forward'
-	},
+	}, 
 	{
 		name: 'Log Out',
-		nav: 'auth',
+		nav: 'cheked',
 		iconL: 'ios-log-out',
 		iconR: 'ios-arrow-forward'
 	},

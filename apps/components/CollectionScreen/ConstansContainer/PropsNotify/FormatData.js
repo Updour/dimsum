@@ -12,6 +12,11 @@ export const formatDate = (value) => {
 		value = value.toString()
 	return moment(new Date(value)).format('DD/MM/YYYY HH:mm:ss')
 }
+export const formatDates = (value) => {
+	if (! value) return ''
+		value = value.toString()
+	return moment(new Date(value)).format('DD-MM-YYYYHH:mm:ss')
+}
 
 // format date
 export const formatDateChart = (value) => {

@@ -73,7 +73,7 @@ export default class AccountComponentScreen extends Component {
   _onFetchValueStorageLocally = async () => {
   	try {
   		let valueVerify = await AsyncStorage.getItem('#keyInput')
-  		let verify = JSON.parse(valueVerify)
+  		let verify = valueVerify
 
   		if (verify === null) {
   			this.setState({ isSwitchValue: false })

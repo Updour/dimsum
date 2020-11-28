@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 
+import AsyncStorage from '@react-native-community/async-storage';
 import { TouchableOpacity, NativeModules } from 'react-native';
 import axios from 'axios'
 import moment from 'moment'
@@ -11,82 +12,100 @@ import {
 	Footer, FooterTab, Button, Card, ListItem, Body,  Right, Form
 } from 'native-base';
 import { 
-	formatPrice, formatDate, SelectDate, formatDatePrint, pNetPrintPasca,
+	formatPrice, formatDate, SelectDate, formatDates, netStruck,
 	PrintStyles, ModalPopUp, styles, Empty, setNotifNot, ReloadScreen
 } from '../../CollectionScreen'
 
 const PrinterManager = NativeModules.PrinterManager;
 
-export default class PrintPascaPln extends Component {
+export default class PrintPulsaPln extends Component {
 	state = {
 		isDate: '',
 		isIdCust: '',
+		isCode: '',
 		isOpen: false,
 		isNtPln: false,
 		refreshing: false,
 	}
 
+	componentDidMount() {
+		this._onRetrieveValueDataStoragg()
+	}
 
+	_onRetrieveValueDataStoragg = async () => {
+    try {
+      let val = await AsyncStorage.getItem('@keyData')
+      let parsed = JSON.parse(val)
+      this.setState({ id : parsed.agenid, hp: parsed.hp, pin: parsed.pin })
+        // setTimeout(() => { this._onRetreiveValueDataUser() }, timer());
+    }catch(err) {
+      throw err;
+    }
+  }
 	// onreteieve data to print
-	_onRetrieveValueData = async () => {
+	_onRetrieveValueDataPrepaid = async () => {
 		try {
-			let { isDate, isIdCust } = this.state;
-			let date = formatDatePrint(isDate)
-			let url = pNetPrintPasca() + date +'/'+ isIdCust
-			if (isDate ==='' || isIdCust ==='') {
-			  return Empty()
-			}
-			let results = await axios.get(url)
-			let isData = results.data.data.length
-			if (isData === 0 || isData === '') {
-			  return setNotifNot()
-			}
-			 let id = results.data.data[0].idpelanggan
-			let name = results.data.data[0].nmpelanggan
-			let payDate = results.data.data[0].tglbyr
-			let product = results.data.data[0].nmproduk
-			let sn = results.data.data[0].refnumber
-			let status = results.data.data[0].status
-			let admin = results.data.data[0].jmladm
-			let payAmount = results.data.data[0].jmlbyr
-			let checkAmount = results.data.data[0].jmlhtag
-			let refPay = results.data.data[0].refpay
-			let feeAmount = results.data.data[0].jmlfee
-			let total = results.data.data[0].totbyr
+			let { isDate, isIdCust, id, isCode } = this.state;
+			let date = formatDates(isDate)
+			let url = `${netStruck()}${id}/${isIdCust}/${isCode}/${date}`
+			console.log('1', url)
+			// http://192.168.0.13:9700//agenid/tujuan/vtype/tanggal
+// http://192.168.0.13:9700/strukpln/xm08000/32104649259/pln20/2020-11-12%2012:54:09
+			// if (isDate ==='' || isIdCust ==='') {
+			//   return Empty()
+			// }
+			// let results = await axios.get(url)
+			// let isData = results.data.data.length
+			// if (isData === 0 || isData === '') {
+			//   return setNotifNot()
+			// }
+			//  let id = results.data.data[0].idpelanggan
+			// let name = results.data.data[0].nmpelanggan
+			// let payDate = results.data.data[0].tglbyr
+			// let product = results.data.data[0].nmproduk
+			// let sn = results.data.data[0].refnumber
+			// let status = results.data.data[0].status
+			// let admin = results.data.data[0].jmladm
+			// let payAmount = results.data.data[0].jmlbyr
+			// let checkAmount = results.data.data[0].jmlhtag
+			// let refPay = results.data.data[0].refpay
+			// let feeAmount = results.data.data[0].jmlfee
+			// let total = results.data.data[0].totbyr
 
-			if (product !== 'PLN') {
-			  return this.setState({
-			  	isNtPln: true,
-			  	isOpen: true,
-			  	refreshing: false,
-			  	id: id,
-			  	name: name,
-			  	payDate: payDate,
-			  	product: product,
-			  	sn: sn,
-			  	status: status,
-			  	admin: (admin) + (refPay) + (feeAmount),
-			  	payAmount: payAmount,
-			  	checkAmount: checkAmount,
-			  	total: total
-			  })
-			}
-			/*state*/
-			this.setState({
-				isNtPln: false,
-				isOpen: true,
-				refreshing: false,
-				id: id,
-				name: name,
-				payDate: payDate,
-				product: product,
-				sn: sn,
-				status: status,
-				admin: admin,
-				payAmount: payAmount,
-				checkAmount: checkAmount,
-				total: total
-			})
+			// if (product !== 'PLN') {
+			//   return this.setState({
+			//   	isNtPln: true,
+			//   	isOpen: true,
+			//   	refreshing: false,
+			//   	id: id,
+			//   	name: name,
+			//   	payDate: payDate,
+			//   	product: product,
+			//   	sn: sn,
+			//   	status: status,
+			//   	admin: (admin) + (refPay) + (feeAmount),
+			//   	payAmount: payAmount,
+			//   	checkAmount: checkAmount,
+			//   	total: total
+			//   })
+			// }
+
+			// /*state*/
+			// this.setState({
+			// 	isNtPln: false,
+			// 	isOpen: true,
+			// 	refreshing: false,
+			// 	id: id,
+			// 	name: name,
+			// 	payDate: payDate,
+			// 	product: product,
+			// 	sn: sn,
+			// 	status: status,
+			// 	admin: admin,
+			// 	payAmount: payAmount,
+			// 	checkAmount: checkAmount,
+			// 	total: total
+			// })
 		}catch(e) {
 			console.log(e)
 		}
@@ -163,6 +182,7 @@ Terima Kasih Dan Selamat
 			payAmount: '',
 			checkAmount: '',
 			total: '',
+			isCode: ''
 		})
 	}
 	_onReloadScreenAndData = () => {
@@ -198,6 +218,14 @@ Terima Kasih Dan Selamat
 			<Input 
 			onChangeText={isIdCust => this.setState({isIdCust})}
 			value={this.state.isIdCust}
+			keyboardType='phone-pad'
+			/>
+			</Item>
+			<Item stackedLabel>
+			<Label>Kode Produk</Label>
+			<Input 
+			onChangeText={isCode => this.setState({isCode})}
+			value={this.state.isCode}
 			keyboardType='phone-pad'
 			/>
 			</Item>
@@ -384,7 +412,7 @@ Terima Kasih Dan Selamat
 		</Content>
 		</ReloadScreen>
 		<Footer style={footerStyles}>
-		<TouchableOpacity style={SubmitStyle} onPress={this._onRetrieveValueData}>
+		<TouchableOpacity style={SubmitStyle} onPress={this._onRetrieveValueDataPrepaid}>
 		<Text style={textStyle}>Cari Data</Text>
 		</TouchableOpacity>
 		</Footer>

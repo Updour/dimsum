@@ -5,7 +5,7 @@ export const ApiMenuContent = [
     img: require('../../../../../assets/images/dashboard/pulsa.png'),
   },
   {
-    name: 'Pulsa Data',
+    name: 'Pulsa Paket',
     nav: 'packet',
     img: require('../../../../../assets/images/dashboard/data.png'),
   },

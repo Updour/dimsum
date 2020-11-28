@@ -1,13 +1,14 @@
 export const ApiMenuGlobal = [
+
   {
-    name: 'Pulsa',
-    text: 'Untuk Pembelian Pulsa',
-    nav: 'regular',
-    img: require('../../../../../assets/images/dashboard/pulsa.png'),
+    name: 'Cetak Struk',
+    text: 'Untuk Cetak Struk PPOB',
+    nav: 'print',
+    img: require('../../../../../assets/images/dashboard/print.png'),
   },
   {
-    name: 'Pulsa Data',
-    text: 'Untuk Pembelian Pulsa Data',
+    name: 'Pulsa Paket',
+    text: 'Untuk Pembelian Pulsa Paket',
     nav: 'packet',
     img: require('../../../../../assets/images/dashboard/data.png'),
   },
@@ -42,12 +43,12 @@ export const ApiMenuGlobal = [
     nav: 'vTv',
     img: require('../../../../../assets/images/voucher/tv.png'),
   },
-  {
-    name: 'Bolt',
-    text: 'Untuk Pembelian Voucher Bolt',
-    nav: 'vBolt',
-    img: require('../../../../../assets/images/voucher/bolt.png'),
-  },
+  // {
+  //   name: 'Bolt',
+  //   text: 'Untuk Pembelian Voucher Bolt',
+  //   nav: 'vBolt',
+  //   img: require('../../../../../assets/images/voucher/bolt.png'),
+  // },
 // ppob
   
   {

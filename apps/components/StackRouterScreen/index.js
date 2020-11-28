@@ -79,13 +79,16 @@ import AboutScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildC
 import PrivacyAndPolicyScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/PrivacyAndPolicyScreen'
 import SecurityScreen from '../TabBottomScreen/ConstanParentComponent/ConstanChildComponent/AccountScreen/SecurityScreen'
 // tester
-import PrintPascaPln from '../PrintOutScreen/PrintPascaPln'
+// import PrintPascaPln from '../PrintOutScreen/PrintPascaPln'
 import TabPlnScreen from '../TransactionScreen/PpobScreen/TabPlnScreen'
+import PrintPascaPln from '../TransactionScreen/PpobScreen/PrintPascaPln'
+import TabPrintStruckScreen from '../TransactionScreen/PpobScreen/TabPrintStruckScreen'
 
 const StackRouterScreen = createStackNavigator({
-    cheked: { screen: StartUpScreeen },
-    forgot: { screen: ForgotPinScreen },
-    auth: { screen: AuthenticationScreen },
+    // cheked: { screen: StartUpScreeen },
+    // forgot: { screen: ForgotPinScreen },
+    // auth: { screen: AuthenticationScreen },
+    print: { screen: TabPrintStruckScreen },
    
     // // tab screen
     MainMenuBottomScreen: { screen: MainMenuBottomScreen },
@@ -155,13 +158,14 @@ const StackRouterScreen = createStackNavigator({
     sms: { screen: SmsComponent },
     security: { screen: SecurityScreen },
 
-    print: { screen: PrintPascaPln },
     allMenu: { screen: ListMenuGlobal }
   }, 
   {
     headerMode: 'none',
     transitionConfig
   })
+
+
 const transitionConfig = () => {
   return {
     transitionSpec: {

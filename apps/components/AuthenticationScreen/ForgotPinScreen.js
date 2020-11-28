@@ -48,11 +48,10 @@ export default class ForgotPinScreen extends Component {
 				let valueVerify = await AsyncStorage.getItem('#keyInput')
 				let valueAuth = await AsyncStorage.getItem('@keyData')
 
-    		let verify = JSON.parse(valueVerify) 
     		let auth = JSON.parse(valueAuth) 
     		if (this._isMounted) {
     		this.setState({ 
-    			isValidate: verify,
+    			isValidate: valueVerify,
     			isId: auth.agenid,
     			isHp: auth.hp,
     			isPin: auth.pin,

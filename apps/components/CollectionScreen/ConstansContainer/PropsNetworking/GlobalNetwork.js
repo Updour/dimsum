@@ -40,3 +40,7 @@ export const netCheking = () => (
 export const netDataTrx  = () => (
   uri = urlXmetrik() + 'dpurchase/'
 )
+// PRINT STRUCK pln prepadi
+export const netStruck  = () => (
+  uri = urlXmetrik() + 'strukpln/'
+)

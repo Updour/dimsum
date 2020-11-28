@@ -68,7 +68,7 @@ export default class PlnPpobScreen extends Component {
   _onCheckingBillProductName = async () => {
   	try {
   		let { tag, id, hp, pin, codes, input, type } = this.state;
-  		if (input === '') {return Empty()}
+  		if (input === '') return Empty()
   			this.setState({ isChecking: true })
   		let posts = {
   			in_hpnumber: hp,
@@ -88,7 +88,7 @@ export default class PlnPpobScreen extends Component {
   _onPayingBillProductName = async () => {
   	try {
   		let { pay, id, hp, pin, codes, input, type } = this.state;
-  		if (input === '') { return Empty() }
+  		if (input === '') return Empty()
   			this.setState({ isPaying: true, isChecking: true })
   		let posts = {
   			in_hpnumber: hp,
