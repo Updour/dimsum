@@ -8,15 +8,15 @@
 
 import React from 'react';
 import { View, StyleSheet, Button, NativeModules } from 'react-native'
-import MainMenuBottomScreen from './apps/components/TabBottomScreen'
-import StackRouterScreen from './apps/components/StackRouterScreen'
+// import MainMenuBottomScreen from './apps/components/TabBottomScreen'
+// import StackRouterScreen from './apps/components/StackRouterScreen'
 /*<StackRouterScreen />*/
-
+import StackNavigation from './src'
 const PrinterManager = NativeModules.PrinterManager;
 
 const App = () => {
   return (
-    <StackRouterScreen />
+    <StackNavigation />
   );
 };
 const styles = StyleSheet.create({
